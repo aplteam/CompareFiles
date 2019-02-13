@@ -1,0 +1,14 @@
+ {r}←Init(sourceFilename C);buff
+ r←⍬
+ IniFiles←##.IniFiles
+ A←##.APLTreeUtils
+ F←##.FilesAndDirs
+ buff←⎕NEW IniFiles(,⊂(⊃⎕NPARTS sourceFilename),'\CompareFiles\CompareFiles.ini')
+ C.INI←buff.Convert ⎕NS''
+ C.INI.CONFIG.EXEs←'expand'∘F.NormalizePath¨C.INI.CONFIG.EXEs
+ :If 1<≢C.INI.CONFIG.EXEs
+     C.INI.CONFIG.EXE←(C.INI.CONFIG.Names⍳⊂C.INI.CONFIG.Default)⊃C.INI.CONFIG.EXEs
+ :Else
+     C.INI.CONFIG.EXE←⊃C.INI.CONFIG.EXEs
+ :EndIf
+⍝Done

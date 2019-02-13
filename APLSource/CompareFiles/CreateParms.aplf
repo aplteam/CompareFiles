@@ -1,0 +1,11 @@
+ ns←CreateParms
+ ns←⎕NS''
+ ns.file1←''
+ ns.file2←''
+ ns.file3←''
+ ns.compareEXE←''
+ ns.readOnly1←1
+ ns.readOnly2←1
+ ns.readOnly3←1
+ ns.⎕FX'r←∆List' 'r←{⍵,[1.5]⍎¨⍵}⎕NL-2' 'r←r[⍋↑r[;1];]'
+⍝Done
