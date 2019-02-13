@@ -1,20 +1,9 @@
-; Note that you cannot add another comparison tool by adding it to this INI file.
-; Since every comparison tools has, at least potentially, different features, switches and arguments
-; every one needs to be dealt with in the user command itself.
-; Feel free to add it yourself: it's not too difficult.
-; If you think you are not up the task and the tools is freely available you might ask me to do it
-; for you: mailto:kai@aplteam.com
-; Note that this user command only offers two-file comparison, no matter what the tool used is offering
-; (KDiff3 and Beyond Compare are actually offering three-file comparison)
-; Version 0.1.0
-; Kai Jaeger - 2019-02-13
-
 [Config]
 
 EXEs        = ''
 Names       = ''
 
-EXEs        ,= '%ProgramW6432%\Beyond Compare 4\bcomp.com'
+EXEs        ,= '%ProgramW6432%\Beyond Compare 4\BCompare.exe'
 Names       ,= 'BeyondCompare'
 
 EXEs        ,= '%ProgramFiles(x86)%\Compare It!\wincmp3.exe'
@@ -22,5 +11,12 @@ Names       ,= 'CompareIt'
 
 EXEs        ,= '%ProgramW6432%\KDiff3\kdiff3.exe'
 Names       ,= 'KDiff3'
+
+EXEs        ,= '%ProgramW6432%\IDM Computer Solutions\UltraCompare\uc.exe'
+Names       ,= 'UltraCompare'
+
+; Under Windows Meld is too slow and unreliable; not even Meld --help works!
+;EXEs        ,= 'C:\Program Files (x86)\Meld\meld.exe'
+;Names       ,= 'Meld'
 
 Default     = 'CompareIt'

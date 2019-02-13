@@ -30,6 +30,11 @@
       C.Init ##.SourceFile C
       (EXE NAME)←EstablishExeAndName C Args
       →(⍬ ⍬≡EXE NAME)/0
+      Args._1←'Please select first filename'GetFilename Args._1
+      →(0=≢Args._1)/0
+      Args._2←'Please select second filename'GetFilename Args._2
+      →(0=≢Args._2)/0
+      (Args._1 Args._2)←{'expand'C.##.FilesAndDirs.NormalizePath ⍵}¨Args._1 Args._2
       origFile1←C.##.APLTreeUtils.ReadUtf8File Args._1
       origFile2←C.##.APLTreeUtils.ReadUtf8File Args._2
       :Select NAME
@@ -39,10 +44,18 @@
           BeyondCompare C EXE NAME Args
       :Case 'CompareIt'
           CompareIt C EXE NAME Args
+      :Case 'Meld'
+          Meld C EXE NAME Args
+      :Case 'UltraCompare'
+          UltraCompare C EXE NAME Args
+      :Else
+          6 ⎕SIGNAL⍨'Comparison tool "',NAME,'" not found!'
       :EndSelect
-      file1←C.##.APLTreeUtils.ReadUtf8File Args._1
-      file2←C.##.APLTreeUtils.ReadUtf8File Args._2
-      r←(origFile1≢file1)(origFile2≢file2)
+      :If ~(⊂NAME)∊,⊂'KDiff3'
+          file1←C.##.APLTreeUtils.ReadUtf8File Args._1
+          file2←C.##.APLTreeUtils.ReadUtf8File Args._2
+          r←(origFile1≢file1)(origFile2≢file2)
+      :EndIf
       ⍝Done
     ∇
 
@@ -61,6 +74,8 @@
           r,←⊂'If you specify -exe=? then all EXEs defined in CompareFile''s INI will be offered to the user'
           r,←⊂'for selection or abortion of the whole process.'
           r,←⊂''
+          r,←⊂'The following notes on the read-only flags are not true for KDiff3 (which allows no editing at all)'
+          r,←⊂'and UltraCompare (which allows no read-only mode).'
           r,←⊂'By default both files can be edited but you can changes this by setting -ro1 / -ro2 accordingly if'
           r,←⊂'(and only if) the utility used for the comparison is supporting this.'
           r,←⊂'For example, by setting -ro1=0 -ro2=0 -ro3=0 all files can be edited while by setting -ro=0 only the'
@@ -91,6 +106,7 @@
           :EndTrap
           (failed/6)⎕SIGNAL⍨'Cannot find ',ws,' in ',path
       :EndTrap
+      ⍝Done
     ∇
 
     ∇ index←{manyFlag}Select options;flag;answer;question;value;bool
@@ -132,37 +148,7 @@
           :EndIf
       :Until flag
       index←{1<≢⍵:⍵ ⋄ ⊃⍵}index
-    ∇
-
-    ∇ {r}←BeyondCompare(C EXE NAME Args);cmd;rc
-      r←⍬
-      cmd←'"',(EXE~'"'),'" ',Args._1,' ',Args._2
-      cmd,←((,'1')≡Args.ro1)/' /ro1'
-      cmd,←((,'1')≡Args.ro2)/' /ro2'
-      cmd,←' /title1=',⊃,/1↓⎕NPARTS Args._1
-      cmd,←' /title2=',⊃,/1↓⎕NPARTS Args._2
-      rc←⎕CMD cmd
-    ∇
-
-    ∇ {r}←CompareIt(C EXE NAME Args);cmd;rc;processInfo;more;result
-      r←⍬
-      cmd←'"',(EXE~'"'),'" ',Args._1,' ',Args._2
-      cmd,←' /=',⊃,/1↓⎕NPARTS Args._1
-      cmd,←' /=',⊃,/1↓⎕NPARTS Args._2
-      cmd,←((,'1')≡Args.ro1)/' /R1'
-      cmd,←((,'1')≡Args.ro2)/' /R2'
-      (rc processInfo result more)←C.##.Execute.Application cmd
-      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
-    ∇
-
-    ∇ {r}←KDiff3(C EXE NAME Args);cmd;rc;processInfo;result;more
-      r←⍬
-      'KDiff3 does not support edit mode'⎕SIGNAL 11/⍨'00'≢∊Args.(ro1 ro2)
-      cmd←'"',(EXE~'"'),'" ',Args._1,' ',Args._2
-      cmd,←' --L1 ',⊃,/1↓⎕NPARTS Args._1
-      cmd,←' --L1 ',⊃,/1↓⎕NPARTS Args._2
-      (rc processInfo result more)←C.##.Execute.Application cmd
-      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
+      ⍝Done
     ∇
 
     ∇ (EXE NAME)←EstablishExeAndName(C Args);ind
@@ -176,8 +162,98 @@
           NAME←ind⊃C.INI.CONFIG.Names
           EXE←(C.INI.CONFIG.Names⍳C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
       :Else
-          'No comparison utility found/defined'⎕SIGNAL 6
+          ind←C.INI.CONFIG.Names⍳⊂Args.exe
+          :If (≢C.INI.CONFIG.Names)<ind
+              'No comparison utility found/defined'⎕SIGNAL 6
+          :EndIf
+          NAME←ind⊃C.INI.CONFIG.Names
+          EXE←(C.INI.CONFIG.Names⍳C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
       :EndIf
+      ⍝Done
     ∇
+
+    ∇ filename←caption GetFilename filename;bb;flag;aa;res
+      :If 0=≢filename
+      :OrIf (,0)≡,filename
+      :OrIf 0=C.##.FilesAndDirs.IsFile filename
+          'bb'⎕WC'BrowseBox'('Caption'caption)('HasEdit' 1)('BrowseFor' 'File')('Target' '')('Event'('FileBoxOK' 'FileBoxCancel')1)
+          flag←0
+          :Repeat
+              res←⎕DQ'bb'
+              :If 'FileBoxCancel'≡2⊃res
+                  filename←''
+                  :Return
+              :EndIf
+              :If 0=flag←C.##.FilesAndDirs.IsFile filename←bb.Target
+                  'aa'⎕WC'MsgBox'('Caption' 'File selection for "CompareFiles"')('Style' 'Info')('Text'('This:'filename'is not a file - try again'))
+                  ⎕DQ'aa'
+              :EndIf
+          :Until flag
+      :EndIf
+      ⍝Done
+    ∇
+
+    :Section ComparisonTools
+
+    ∇ {r}←BeyondCompare(C EXE NAME Args);cmd;rc;processInfo;more;result
+      r←⍬
+      cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
+      cmd,←((,'1')≡Args.ro1)/' /ro1'
+      cmd,←((,'1')≡Args.ro2)/' /ro2'
+      cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      (rc processInfo result more)←C.##.Execute.Application cmd
+      ⍝Done
+    ∇
+
+    ∇ {r}←CompareIt(C EXE NAME Args);cmd;rc;processInfo;more;result
+      r←⍬
+      cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
+      cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :If (,0)≡,Args.ro1
+      :AndIf (,0)≡,Args.ro2
+          cmd,←((,0)≡,Args.ro1)/' /R'
+      :Else
+          :If (,0)≡,Args.ro1
+              cmd,←' /R1'
+          :ElseIf (,0)≡,Args.ro2
+              cmd,←' /R2'
+          :EndIf
+      :EndIf
+      (rc processInfo result more)←C.##.Execute.Application cmd
+      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
+      ⍝Done
+    ∇
+
+    ∇ {r}←KDiff3(C EXE NAME Args);cmd;rc;processInfo;result;more
+      r←⍬
+      cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
+      cmd,←' --L1 ',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      cmd,←' --L2 ',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      (rc processInfo result more)←C.##.Execute.Application cmd
+      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
+      ⍝Done
+    ∇
+
+    ∇ {r}←Meld(C EXE NAME Args);cmd;rc;processInfo;result;more
+      r←⍬
+      cmd←'"',(EXE~'"'),'" '
+      cmd,←'"',(C.##.FilesAndDirs.EnforceSlash Args._1~'"'),'"'
+      cmd,←,' "',(C.##.FilesAndDirs.EnforceSlash Args._2~'"'),'"'
+      (rc processInfo result more)←C.##.Execute.Application cmd
+      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
+      ⍝Done
+    ∇
+
+    ∇ {r}←UltraCompare(C EXE NAME Args);cmd;rc;processInfo;result;more
+      r←⍬
+      cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
+      (rc processInfo result more)←C.##.Execute.Application cmd
+      (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
+      ⍝Done
+    ∇
+
+    :EndSection
 
 :EndClass ⍝ CompareFiles
