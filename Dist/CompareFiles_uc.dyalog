@@ -39,16 +39,16 @@
       (Args._1 Args._2)←{'expand'C.##.FilesAndDirs.NormalizePath ⍵}¨Args._1 Args._2
       origFile1←C.##.APLTreeUtils.ReadUtf8File Args._1
       origFile2←C.##.APLTreeUtils.ReadUtf8File Args._2
-      :Select NAME
-      :Case 'KDiff3'
+      :Select C.##.APLTreeUtils.Lowercase NAME
+      :Case 'kdiff3'
           KDiff3 C EXE NAME Args
-      :Case 'BeyondCompare'
+      :Case 'beyondcompare'
           BeyondCompare C EXE NAME Args
-      :Case 'CompareIt'
+      :Case 'compareit'
           CompareIt C EXE NAME Args
-      :Case 'Meld'
+      :Case 'meld'
           Meld C EXE NAME Args
-      :Case 'UltraCompare'
+      :Case 'ultracompare'
           UltraCompare C EXE NAME Args
       :Else
           6 ⎕SIGNAL⍨'Comparison tool "',NAME,'" not found!'
@@ -165,14 +165,14 @@
           ind←Select C.INI.CONFIG.Names
           →(⍬≡ind)/0
           NAME←ind⊃C.INI.CONFIG.Names
-          EXE←(C.INI.CONFIG.Names⍳C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
+          EXE←((C.##.APLTreeUtils.Lowercase C.INI.CONFIG.Names)⍳C.##.APLTreeUtils.Lowercase C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
       :Else
-          ind←C.INI.CONFIG.Names⍳⊂Args.exe
+          ind←(C.##.APLTreeUtils.Lowercase C.INI.CONFIG.Names)⍳C.##.APLTreeUtils.Lowercase⊂Args.exe
           :If (≢C.INI.CONFIG.Names)<ind
               'No comparison utility found/defined'⎕SIGNAL 6
           :EndIf
           NAME←ind⊃C.INI.CONFIG.Names
-          EXE←(C.INI.CONFIG.Names⍳C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
+          EXE←((C.##.APLTreeUtils.Lowercase C.INI.CONFIG.Names)⍳C.##.APLTreeUtils.Lowercase C.INI.CONFIG.Names[ind])⊃C.INI.CONFIG.EXEs
       :EndIf
       ⍝Done
     ∇
@@ -205,33 +205,35 @@
       cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
       cmd,←((,'1')≡Args.ro1)/' /ro1'
       cmd,←((,'1')≡Args.ro2)/' /ro2'
-      :if (,0)≡,Args.label1
+      :If (,0)≡,Args.label1
           cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      :else
+      :Else
           cmd,←' /title1=',Args.label1
-      :endif
-      :if (,0)=,Args.label2
+      :EndIf
+      :If (,0)≡,Args.label2
           cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS Args._2
-      :else
+      :Else
           cmd,←' /title2=',Args.label2
-      :endif          
+      :EndIf
       (rc processInfo result more)←C.##.Execute.Application cmd
       ⍝Done
     ∇
 
     ∇ {r}←CompareIt(C EXE NAME Args);cmd;rc;processInfo;more;result
       r←⍬
-      cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
-      :if (,0)≡,Args.label1
-            cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      :else
-            cmd,←' /=',label1
-      :endif
-      :if (,0)≡,Args.label2
-            cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._2
-      :else
-            cmd,←' /=',label2
-      :endif
+      cmd←'"',(EXE~'"'),'"'
+      cmd,←' "',(Args._1~'"'),'"'
+      :If (,0)≡,Args.label1
+          cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      :Else
+          cmd,←' /=',Args.label1
+      :EndIf
+      cmd,←' "',(Args._2~'"'),'"'
+      :If (,0)≡,Args.label2
+          cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :Else
+          cmd,←' /=',Args.label2
+      :EndIf
       :If (,'1')≡,Args.ro1
       :AndIf (,'1')≡,Args.ro2
           cmd,←' /R'
@@ -250,16 +252,16 @@
     ∇ {r}←KDiff3(C EXE NAME Args);cmd;rc;processInfo;result;more
       r←⍬
       cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
-      :if (,0)≡,Args.label1
-            cmd,←' --L1 ',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      :else
-            cmd,←' --L1 ',Args.label1
-      :endif
-      :if (,0)≡,Args.label2
-            cmd,←' --L2 ',' '~⍨⊃,/1↓⎕NPARTS Args._2
-      :else
-            Args.label2
-      :endif
+      :If (,0)≡,Args.label1
+          cmd,←' --L1 ',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      :Else
+          cmd,←' --L1 ',Args.label1
+      :EndIf
+      :If (,0)≡,Args.label2
+          cmd,←' --L2 ',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :Else
+          cmd,←' --L2 ',Args.label2
+      :EndIf
       (rc processInfo result more)←C.##.Execute.Application cmd
       (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
       ⍝Done
