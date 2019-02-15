@@ -1,3 +1,6 @@
  History
+⍝ * 0.2.0
+⍝   * Name of the EXE is now case indenependent.
+⍝   * For tools supporting this now -label1 and -label2 can be specified.
 ⍝ * 0.1.0
 ⍝   * Initial version

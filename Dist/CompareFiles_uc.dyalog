@@ -1,6 +1,8 @@
 ﻿:Class  CompareFiles
 ⍝ User Command script for "CompareFiles".
 ⍝ Expects the WS CompareFiles.dws to be a sibling of this script.
+⍝ Kai Jaeger - APL Team Ltd
+⍝ Version 1.1.0 - 2019-02-15
 
     ⎕IO←⎕ML←1
 
@@ -9,7 +11,7 @@
       r←⎕NS''
       r.Group←'TOOLS'
       r.Name←'CompareFiles'
-      r.Parse←'2s -exe= -ro1∊01 -ro2∊01'
+      r.Parse←'2s -exe= -ro1∊01 -ro2∊01 -label1= -label2='
       r.Desc←'Compare two files with each other.'
     ∇
 
@@ -86,6 +88,9 @@
           r,←⊂'Note that you cannot just add another comparison utility to the INI file. Because every comparison'
           r,←⊂'utility has, at least potentially, different features, arguments and switches each one needs a separate'
           r,←⊂'entry in the user command script itself. However, adding that is not a big deal.'
+          r,←⊂''
+          r,←⊂'-label1 and -label2 can be set as title for the two comparison panes. Might have no effect in case the'
+          r,←⊂'choosen comparison tool does not support something like this. Defaults to the name of the files.'
       :EndSelect
       r,←(level=0)/⊂']',Cmd,' -??  ⍝ for syntax details'
     ∇
@@ -200,8 +205,16 @@
       cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
       cmd,←((,'1')≡Args.ro1)/' /ro1'
       cmd,←((,'1')≡Args.ro2)/' /ro2'
-      cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :if (,0)≡,Args.label1
+          cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      :else
+          cmd,←' /title1=',Args.label1
+      :endif
+      :if (,0)=,Args.label2
+          cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :else
+          cmd,←' /title2=',Args.label2
+      :endif          
       (rc processInfo result more)←C.##.Execute.Application cmd
       ⍝Done
     ∇
@@ -209,15 +222,23 @@
     ∇ {r}←CompareIt(C EXE NAME Args);cmd;rc;processInfo;more;result
       r←⍬
       cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
-      cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._2
-      :If (,0)≡,Args.ro1
-      :AndIf (,0)≡,Args.ro2
-          cmd,←((,0)≡,Args.ro1)/' /R'
+      :if (,0)≡,Args.label1
+            cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      :else
+            cmd,←' /=',label1
+      :endif
+      :if (,0)≡,Args.label2
+            cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :else
+            cmd,←' /=',label2
+      :endif
+      :If (,'1')≡,Args.ro1
+      :AndIf (,'1')≡,Args.ro2
+          cmd,←' /R'
       :Else
-          :If (,0)≡,Args.ro1
+          :If (,'1')≡,Args.ro1
               cmd,←' /R1'
-          :ElseIf (,0)≡,Args.ro2
+          :ElseIf (,'1')≡,Args.ro2
               cmd,←' /R2'
           :EndIf
       :EndIf
@@ -229,8 +250,16 @@
     ∇ {r}←KDiff3(C EXE NAME Args);cmd;rc;processInfo;result;more
       r←⍬
       cmd←'"',(EXE~'"'),'" "',(Args._1~'"'),'" "',(Args._2~'"'),'"'
-      cmd,←' --L1 ',' '~⍨⊃,/1↓⎕NPARTS Args._1
-      cmd,←' --L2 ',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :if (,0)≡,Args.label1
+            cmd,←' --L1 ',' '~⍨⊃,/1↓⎕NPARTS Args._1
+      :else
+            cmd,←' --L1 ',Args.label1
+      :endif
+      :if (,0)≡,Args.label2
+            cmd,←' --L2 ',' '~⍨⊃,/1↓⎕NPARTS Args._2
+      :else
+            Args.label2
+      :endif
       (rc processInfo result more)←C.##.Execute.Application cmd
       (more,'; rc=',⍕rc)⎕SIGNAL 11/⍨0≠rc
       ⍝Done
