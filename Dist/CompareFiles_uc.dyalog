@@ -2,7 +2,7 @@
 ⍝ User Command script for "CompareFiles".
 ⍝ Expects the WS CompareFiles.dws to be a sibling of this script.
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 1.1.0 - 2019-02-15
+⍝ Version 1.0.0 - 2019-02-21
 
     ⎕IO←⎕ML←1
 
@@ -206,14 +206,14 @@
       cmd,←((,'1')≡Args.ro1)/' /ro1'
       cmd,←((,'1')≡Args.ro2)/' /ro2'
       :If (,0)≡,Args.label1
-          cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS Args._1
+          cmd,←' /title1="',(⊃,/1↓⎕NPARTS Args._1),'"'
       :Else
-          cmd,←' /title1=',Args.label1
+          cmd,←' /title1="',Args.label1,'"'
       :EndIf
       :If (,0)≡,Args.label2
-          cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS Args._2
+          cmd,←' /title2="',(⊃,/1↓⎕NPARTS Args._2),'"'
       :Else
-          cmd,←' /title2=',Args.label2
+          cmd,←' /title2="',Args.label2,'"'
       :EndIf
       (rc processInfo result more)←C.##.Execute.Application cmd
       ⍝Done
