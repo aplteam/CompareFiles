@@ -2,7 +2,7 @@
 ⍝ User Command script for "CompareFiles".
 ⍝ Expects the WS CompareFiles.dws to be a sibling of this script.
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 1.0.0 - 2019-02-21
+⍝ Version 1.0.1 - 2019-02-21
 
     ⎕IO←⎕ML←1
 
@@ -45,9 +45,9 @@
       :EndTrap
       :Trap 11
           origFile2←C.##.APLTreeUtils.ReadUtf8File Args._2
-          :Return
       :Case 11
           ⎕←'Could not read file ',Args._2
+          :Return
       :EndTrap
       :Select C.##.APLTreeUtils.Lowercase NAME
       :Case 'kdiff3'
