@@ -19,4 +19,4 @@ Names       ,= 'UltraCompare'
 ;EXEs        ,= 'C:\Program Files (x86)\Meld\meld.exe'
 ;Names       ,= 'Meld'
 
-Default     = 'CompareIt'
+Default     = 'BeyondCompare'

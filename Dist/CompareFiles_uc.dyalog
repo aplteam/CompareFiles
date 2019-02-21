@@ -37,8 +37,18 @@
       Args._2←'Please select second filename'GetFilename Args._2
       →(0=≢Args._2)/0
       (Args._1 Args._2)←{'expand'C.##.FilesAndDirs.NormalizePath ⍵}¨Args._1 Args._2
-      origFile1←C.##.APLTreeUtils.ReadUtf8File Args._1
-      origFile2←C.##.APLTreeUtils.ReadUtf8File Args._2
+      :Trap 11
+          origFile1←C.##.APLTreeUtils.ReadUtf8File Args._1
+      :Case 11
+          ⎕←'Could not read file ',Args._1
+          :Return
+      :EndTrap
+      :Trap 11
+          origFile2←C.##.APLTreeUtils.ReadUtf8File Args._2
+          :Return
+      :Case 11
+          ⎕←'Could not read file ',Args._2
+      :EndTrap
       :Select C.##.APLTreeUtils.Lowercase NAME
       :Case 'kdiff3'
           KDiff3 C EXE NAME Args

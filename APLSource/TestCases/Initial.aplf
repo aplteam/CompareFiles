@@ -1,5 +1,5 @@
  Initial;msg;folder;more;rc
- msg←'These tests require the version to be tested the official user command.'
+ msg←'These tests require the version to be tested to be the official user command.'
  :If 0=∆YesOrNo msg,' Would you like to carry on?'
      'User has cancelled!'⎕SIGNAL 11
  :EndIf
