@@ -1,0 +1,6 @@
+ r←Public;l
+ l←' '~⍨¨↓'C'ComparisonTools.⎕NL 3
+ r←('CreateParmsFor'∘{⍺≡(≢⍺)↑⍵}¨l)/l
+ r,←⊂'Compare'
+ r,←⊂'EstablishCompareEXE'
+ r,←⊂'Version'

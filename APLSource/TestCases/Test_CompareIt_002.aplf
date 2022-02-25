@@ -1,15 +1,19 @@
- R←Test_Tools_002(stopFlag batchFlag);⎕TRAP;msg;r;tool
+ R←Test_CompareIt_002(stopFlag batchFlag);⎕TRAP;msg;r;tool
 ⍝ Run "CompareIt" and allow both files to be edited
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
  R←∆Failed
 
+  :If batchFlag
+     →0,R←T._NoBatchTest
+ :EndIf
+
  ⎕←' Test: ',⊃⎕SI
  msg←''
  msg,←⊂'This test case needs you: it fires up CompareIt.'
- msg,←⊂'None of the two files should be read-only - please change both of them!'
+ msg,←⊂'Both files should be editable - please change both of them!'
  ∆Show msg
 
- r←⎕SE.UCMD'CompareFiles ''TestData\file1 with blank.txt'' ''TestData\file2 with blank.txt'' -exe=CompareIt -ro1=0 -ro2=0'
+ r←⎕SE.UCMD'CompareFiles ''TestData\file1 with blank.txt'' ''TestData\file2 with blank.txt'' -exe=CompareIt -edit'
 
  :If ∆YesOrNo'Was "CompareIt" started and both files changed?'
  :AndIf 2=+/r

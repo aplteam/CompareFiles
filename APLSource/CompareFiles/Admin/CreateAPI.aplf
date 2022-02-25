@@ -1,0 +1,14 @@
+ {r}←CreateAPI flag;list1;list2
+⍝ Creates cover functions for all API functions in ##.API from ##.Public.\\
+ r←⍬
+ :If flag
+     :If 0<##.⎕NC'API'
+         :If 0<≢list1←↓##.API.⎕NL⍳16
+             ⎕SE.Link.Expunge¨(⊂(⍕⎕THIS),'.##.API.'),¨list1
+         :EndIf
+     :Else
+         'API'##.⎕NS''
+     :EndIf
+     list2←##.Public~'' ''
+     ##.API.{⍎⍵,'←{⍺←⊣ ⋄ ⍺ ##.',⍵,' ⍵}'}¨list2
+ :EndIf

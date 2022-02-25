@@ -1,0 +1,32 @@
+ (rc out err)←UltraCompare(parms EXE name);cmd;result
+⍝ Function for the comparison utility UltraCompare
+ cmd←'"',(EXE~'"'),'" '
+ :If 0<≢parms.file1
+     cmd,←'"',(parms.file1~'"'),'"'
+ :EndIf
+ :If 0<≢parms.file2
+     cmd,←' "',(parms.file2~'"'),'"'
+ :EndIf
+ :If 0<≢parms.file3
+     cmd,←' "',(parms.file3~'"'),'"'
+ :EndIf
+ :If 0=≢parms.caption1
+     cmd,←' -title1 ',' '~⍨⊃,/1↓⎕NPARTS parms.file1
+ :Else
+     cmd,←' -title1 "',(parms.caption1~'"'),'"'
+ :EndIf
+ :If 0=≢parms.caption2
+     cmd,←' -title2 ',' '~⍨⊃,/1↓⎕NPARTS parms.file2
+ :Else
+     cmd,←' -title2 "',(parms.caption2~'"'),'"'
+ :EndIf
+ :If 0<≢parms.file3
+     :If 0=≢parms.caption3
+         cmd,←' -title3 ',' '~⍨⊃,/1↓⎕NPARTS parms.file3
+     :Else
+         cmd,←' -title3 "',(parms.caption3~'"'),'"'
+     :EndIf
+ :EndIf
+ result←##.RunProcess cmd
+ (rc out err)←result.(ExitCode StdOut ExitCode)
+⍝Done

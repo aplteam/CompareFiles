@@ -1,0 +1,63 @@
+ (exe name)←{force}EstablishCompareEXE use;quit;ind;exes;names;default
+⍝ Needs data from the Ini file.
+⍝ If `use` is not empty it is expected to be the name of a comparison utility defined in
+⍝ the INI file. The existence is then checked,
+⍝ If INI.EXE exists then this is returned without further ado. This can be changed by
+⍝ passing a 1 as left argument ("force").
+⍝ Otherwise - or when force←1 - it tries to establish the EXE to be used for file comparisons.
+⍝ If the INI file defines a default then that is taken. If the default points to an EXE that
+⍝ does not exist an error is thrown.
+⍝ If no default is defined then all EXEs are checked. Those that do not exist are ignored.
+⍝ If only one EXE remains it is taken. If more than one remain the user is interrogated.
+⍝ Note that the fully qualified path to a comparison EXE is not only returned as shy argument
+⍝ but also assigned to [CONFIG:EXE] in the Ini file instance.
+ exe←name←''
+ force←{0<⎕NC ⍵:⍎⍵ ⋄ 0}'force'
+ :If 0=INI.⎕NC'EXE'
+ :OrIf force
+ :OrIf 0<≢use
+ :OrIf (,'?')≡,use
+     (exes names default)←INI.(EXEs Names Default)
+     'No comparison tool available/defined'Assert 0<≢exes
+     (exes names)←DropUtilitiesNotOnPath exes names
+     'No comparison utility found'Assert 0<≢exes
+     :If (,'?')≡,use
+     :AndIf 0=≢use←{0=≢r←Select ⍵:'' ⋄ r⊃⍵}names
+         :Return
+     :EndIf
+     :If 0<≢use
+         ('Not available: ',use)Assert(⊂⎕C use)∊⎕C names
+         ind←(⎕C names)⍳⊂⎕C use
+         name←ind⊃names
+         exe←ind⊃exes
+     :Else
+         :Select ≢exes
+         :Case 0
+             'No comparison tool available/defined'Assert 0
+         :Case 1
+             (exe name)←⊃¨exes names
+         :Else
+             :If 0<≢default
+                 :If (⊂default)∊names
+                     (exe name)←(names⍳⊂default)⊃¨exes names
+                 :Else
+                     'Default definition in INI file is invalid'⎕SIGNAL 11
+                 :EndIf
+             :Else
+                 quit←0
+                 :Repeat
+                     ⎕←'Select Comparison tility:'
+                     ind←Select names
+                     'Cancelled by user'Assert 0≠≢ind
+                     (exe name)←ind⊃¨exes names
+                     quit←1
+                 :Until quit
+             :EndIf
+         :EndSelect
+     :EndIf
+     INI.Default←name
+     INI WriteJSON5 GetIniFilename
+ :Else
+     (exe name)←INI.(EXE Name)
+ :EndIf
+ ⍝Done

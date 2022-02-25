@@ -1,11 +1,11 @@
- Initial;msg;folder;more;rc
+ r←Initial;msg;folder
  msg←'These tests require the version to be tested to be the official user command.'
- :If 0=∆YesOrNo msg,' Would you like to carry on?'
-     'User has cancelled!'⎕SIGNAL 11
+ :If ∆YesOrNo msg,' Would you like to carry on?'
+     r←1
+     folder←'TestData\'
+     folder{( ⍺,⍵,'.txt')⎕NCOPY⍠('IfExists' 'Replace')⊣ ⍺,⍵,'.orig'}'file1 with blank'
+     folder{(⍺,⍵,'.txt')⎕NCOPY ⍠('IfExists' 'Replace')⊣⍺,⍵,'.orig' }'file2 with blank'
+ :Else
+     r←0
  :EndIf
- folder←'TestData\'
- (rc more)←folder{(⍺,⍵,'.orig')##.FilesAndDirs.CopyTo ⍺,⍵,'.txt'}'file1 with blank'
- more Assert 0=rc
- (rc more)←folder{(⍺,⍵,'.orig')##.FilesAndDirs.CopyTo ⍺,⍵,'.txt'}'file2 with blank'
- more Assert 0=rc
 ⍝Done

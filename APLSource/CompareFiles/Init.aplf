@@ -1,14 +1,21 @@
- {r}←Init(sourceFilename C);buff
+ {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;iniFilename2;buff
  r←⍬
- IniFiles←##.IniFiles
- A←##.APLTreeUtils
- F←##.FilesAndDirs
- buff←⎕NEW IniFiles(,⊂(⊃⎕NPARTS sourceFilename),'\CompareFiles\CompareFiles.ini')
- C.INI←buff.Convert ⎕NS''
- C.INI.CONFIG.EXEs←'expand'∘F.NormalizePath¨C.INI.CONFIG.EXEs
- :If 1<≢C.INI.CONFIG.EXEs
-     C.INI.CONFIG.EXE←(C.INI.CONFIG.Names⍳⊂C.INI.CONFIG.Default)⊃C.INI.CONFIG.EXEs
- :Else
-     C.INI.CONFIG.EXE←⊃C.INI.CONFIG.EXEs
+ :If 0=⎕NC'INI'
+     iniFilename←GetIniFilename
+     :If 0=##.⎕NC'CiderConfig'  ⍝ Running as a User Command?
+         ⎕SE.Tatin.LoadDependencies(GetMyUCMDsPath,'/CompareFiles/packages')⎕SE
+     :Else  ⍝ Opened as a Cider Project
+         ⎕SE.Tatin.LoadDependencies(##.CiderConfig.HOME,'/packages')⎕SE
+     :EndIf
+     A←##.APLTreeUtils2
+     F←##.FilesAndDirs
+     INI←ReadJSON5 iniFilename
+     iniFilename2←(1⊃⎕NPARTS iniFilename),'user.json5'
+     :If ⎕NEXISTS iniFilename2
+         buff←ReadJSON5 iniFilename2
+     :AndIf 0<≢buff.EXEs
+         INI.EXEs,←buff.EXEs
+         INI.Names,←buff.Names
+     :EndIf
  :EndIf
 ⍝Done
