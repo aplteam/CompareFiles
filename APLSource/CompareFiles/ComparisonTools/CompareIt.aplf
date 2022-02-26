@@ -18,17 +18,14 @@
          cmd,←' /="',(parms.caption2~'"'),'"'
      :EndIf
  :EndIf
- 'CompareIt does not do three-file comparisons'##.Assert 0=≢parms.file3
- :If ~parms.edit
-     :If 0=+/parms.(edit1,edit2)
-         cmd,←' /R'
-     :Else
-         :If 0=parms.edit1
-             cmd,←' /R1'
-         :EndIf
-         :If 0=parms.edit2
-             cmd,←' /R2'
-         :EndIf
+ :If 0=+/parms.(edit1,edit2)
+     cmd,←' /R'
+ :Else
+     :If 0=parms.edit1
+         cmd,←' /R1'
+     :EndIf
+     :If 0=parms.edit2
+         cmd,←' /R2'
      :EndIf
  :EndIf
  result←##.RunProcess cmd

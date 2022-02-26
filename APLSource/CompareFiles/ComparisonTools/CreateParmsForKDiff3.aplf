@@ -3,9 +3,7 @@
  ns←⎕NS''
  ns.file1←''
  ns.file2←''
- ns.file3←''
  ns.caption1←''
  ns.caption2←''
- ns.caption3←''  ⍝ Note that BeyondCompare, caption1 is left pane, caption2 is right pane but caption3 is center pane!
  ns.⎕FX'r←∆List' 'r←{⍵,[1.5]⍎¨⍵}⎕NL-2' 'r←r[⍋↑r[;1];]'
 ⍝Done

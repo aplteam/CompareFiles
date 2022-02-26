@@ -1,8 +1,7 @@
-:Class  CompareFiles_uc
+﻿:Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
-⍝ Expects the WS CompareFiles.dws to be a sibling of this script.
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 2.0.0 from 2022-02-21
+⍝ Version 2.0.0 from 2022-02-26
 
     ⎕IO←⎕ML←1
 
@@ -13,33 +12,28 @@
       r←⎕NS''
       r.Group←'TOOLS'
       r.Name←'CompareFiles'
-      r.Parse←'3s -edit -edit1 -edit2 -edit3 -caption1= -caption2= -caption3= -use='
+      r.Parse←'2 -edit1 -edit2 -caption1= -caption2= -use='
       r.Desc←'Compare two files with each other.'
-      :If 0=⎕SE.⎕NC'_CompareFiles'
-          ⎕SE.⎕EX'CompareFiles'
-          {⍵ ⎕SE.⎕NS''}¨'_CompareFiles' 'CompareFiles'
-          res←⎕SE.Link.Import ⎕SE._CompareFiles(GetMyUCMDsPath,'CompareFiles/APLSource')
-          :If 'Imported: '{⍺≢(≢⍺)↑⍵}res
-              ⎕←'Failed to load "CompareFiles" into ⎕SE...'
-          :EndIf
-      :EndIf
       ⍝Done
     ∇
 
     ∇ r←Run(Cmd Args);fn1;fn2;fn3;parms;stdOut;rc;stdErr;orig1;orig2;orig3;exe;name
       :Access Shared Public
+      r←''
+      :If 0=⎕SE.⎕NC'_CompareFiles'
+          AutoloadCompareFiles(1⊃⎕NPARTS ##.SourceFile)
+      :EndIf
       C←⎕SE._CompareFiles
       CT←C.ComparisonTools
       C.Init ⍬
+      '⍵[1] is not a file'Assert ⎕NEXISTS Args._1
+      '⍵[2] is not a file'Assert ⎕NEXISTS Args._2
       (exe name)←C.EstablishCompareEXE{0≡⍵:'' ⋄ ⍵}Args.use
       →(0=≢exe)/0
-      :Trap 6
-          parms←CT.⍎'CreateParmsFor',name
-      :Else
-          →0⊣⎕←'Missing: function "CreateParmsFor',name,'"'
-      :EndTrap
+      ('Missing: function "CreateParmsFor',name,'"')Assert 3=CT.⎕NC'CreateParmsFor',name
+      parms←CT.⍎'CreateParmsFor',name
       :If ≡/LowercaseIfWindows¨Args._1 Args._2
-          'You cannot compare a file with itself'⎕SIGNAL 911
+          'Comparing a file with itself makes no sense'⎕SIGNAL 911
       :EndIf
       parms.use←exe
       parms.name←name
@@ -47,28 +41,15 @@
       →(0=≢parms.file1)/0
       parms.file2←'Please select second filename'GetFilename Args._2
       →(0=≢parms.file2)/0
-      parms.file3←{0≡⍵:'' ⋄ ⍵}Args._3
       parms.(file1 file2)←{'expand'C.##.FilesAndDirs.NormalizePath ⍵}¨parms.(file1 file2)
-      parms.(caption1 caption2 caption3)←parms.(file1 file2 file3){0≡⍵:⍺ ⋄ ⍵}¨Args.(caption1 caption2 caption3)
+      parms.(caption1 caption2)←parms.(file1 file2){0≡⍵:⍺ ⋄ ⍵}¨Args.(caption1 caption2)
       (orig1 orig2)←ReadFile¨parms.(file1 file2)
-      :If 0<≢parms.file3
-          :If 0≢parms.file3
-              parms.file3←'expand'C.##.FilesAndDirs.NormalizePath parms.file3
-              orig3←ReadFile parms.file3
-          :Else
-              parms.file3←''
-          :EndIf
-      :EndIf
-      :If Args.edit
-          parms.(edit1 edit2 edit3)←parms.edit←1
-      :Else
-          parms.(edit1 edit2 edit3)←Args.(edit1 edit2 edit3)
-      :EndIf
+      parms.(edit1 edit2)←Args.(edit1 edit2)
       (rc stdOut stdErr)←C.Compare parms
       :If 0≠rc
           ⎕EM ⎕SIGNAL 11
       :EndIf
-      r←(2+(0<≢parms.file3)∧(,0)≢,parms.file3)⍴0
+      r←2⍴0
       :If 0<≢parms.file1
       :AndIf parms.edit1
           r[1]←orig1≢ReadFile parms.file1
@@ -76,10 +57,6 @@
       :If 0<≢parms.file2
       :AndIf parms.edit2
           r[2]←orig2≢ReadFile parms.file2
-      :EndIf
-      :If 0<≢parms.file3
-      :AndIf parms.edit3
-          r[3]←orig3≢ReadFile parms.file3
       :EndIf
     ∇
 
@@ -90,32 +67,27 @@
       :Case 0
           r,←⊂List.Desc
       :Case 1
-          r,←⊂'Specify two or three filenames as arguments. If you do not specify any, or just one'
-          r,←⊂'filename, then under the Windows operating system a Browse window is opened which you '
-          r,←⊂'can use to specify the missing file(s). Note that some utilities do not support'
-          r,←⊂'three-file comparisons.'
+          r,←⊂'Specify two filenames as arguments. These files will then be compared with one of the'
+          r,←⊂'compare utilities defined in "ini.json5" & potentially also "user.json5" - see below.'
           r,←⊂''
-          r,←⊂'The files can then be compared with one of the compare utilities defined in "ini.json5"'
-          r,←⊂'and potentially also "user.json5" - see below.'
-          r,←⊂''          
           r,←⊂'Naturally utilities that are not available are ignored, and the user might select one'
-          r,←⊂'from the remaining list if there are more than just one left.'          
+          r,←⊂'from the remaining list if there are more than just one left.'
           r,←⊂'Instead you may specify a comparison utility with -use= by assigning the name as'
           r,←⊂'defined in the "ini.jsn5" file. Either way, your choice will be remembered.'
           r,←⊂''
-          r,←⊂'By default no file can be edited, but you can change this by specifying either -edit,'
-          r,←⊂'allowing all files to be edited, or one of -edit1, -edit2 or -edit3, allowing just the'
-          r,←⊂'corresponding file to be edited. Of course this is true only if the chosen comparison'
-          r,←⊂'utility is supporting this: some do not support read-only, some do not allow editing.'
+          r,←⊂'By default no file can be edited, but you can change this by specifying either -edit1'
+          r,←⊂'and/or -edit2, allowing just the corresponding file to be edited. Of course this is'
+          r,←⊂'true only if the chosen comparison utility is supporting this: some do not support'
+          r,←⊂'read-only, some do not.'
           r,←⊂''
-          r,←⊂'-caption[123] can be set as caption for the comparison panes. Might have no effect in'
-          r,←⊂'case the chosen comparison tool does not support something like this. Defaults to the'
-          r,←⊂'name of the files.'
+          r,←⊂'-caption1= and -caption2= can be set as caption for the comparison panes. Might have'
+          r,←⊂'no effect in case the chosen comparison tool does not support something like this.'
+          r,←⊂'Defaults to the name of the files.'
           r,←⊂''
-          r,←⊂'The command returns a vector of 2 or 3 Booleans, depending in the number of files. '
+          r,←⊂'The command returns a vector of two Booleans.'
           r,←⊂'A 1 indicates that the associated file has been changed.'
           r,←⊂''
-          r,←⊂'Note that you can add yoiur favourite comparison utility; enter:'
+          r,←⊂'Note that you can add your favourite comparison utility; enter:'
           r,←⊂']CompareFiles -???'
           r,←⊂'for how to do that,'
       :Case 2
@@ -123,13 +95,14 @@
           r,←⊂''
           r,←⊂' 1. Add a file "user.json5" to MyUCMDs\CompareFiles'
           r,←⊂' 2. Edit the file and add your favourite utility. View "ini.json5" as a reference.'
-          r,←⊂' 3. For a utility "Foo" add a fn Foo to MyUCMDs/CompareFiles/ComparisonTools/'
-          r,←⊂' 4. Add also a function CreateParmsForFoo to MyUCMDs/CompareFiles/ComparisonTools/'
-          r,←⊂'    Copy existing fns by renaming and amending them.'
+          r,←⊂' 3. For a utility "Foo" add a fn Foo.aplf to MyUCMDs/CompareFiles/ComparisonTools/'
+          r,←⊂' 4. Add also a function CreateParmsForFoo.aplf to MyUCMDs/CompareFiles/ComparisonTools/'
           r,←⊂''
           r,←⊂'Notes:'
-          r,←⊂' * Adding an entry to "ini.json5" would work, but will be overwritten in case of an update'
-          r,←⊂' * You may copy an already existing fn for both the comparison and the parameter space'
+          r,←⊂' * Adding an entry to "ini.json5" would work, but will be overwritten once you'
+          r,←⊂'   update the user command.'
+          r,←⊂' * You may copy an already existing function for both the comparison as well as the'
+          r,←⊂'   creation of the parameter space for inspiration.'
       :EndSelect
       r,←(level=0)/⊂']',Cmd,' -??  ⍝ for syntax details'
     ∇
@@ -216,6 +189,23 @@
     ∇ txt←LowercaseIfWindows txt
       :If 'Win'≡C.##.APLTreeUtils2.GetOperatingSystem ⍬
           txt←⎕C txt
+      :EndIf
+    ∇
+
+    Assert←{⍺←'' ⋄ (,1)≡,⍵:r←1 ⋄ ⎕ML←1 ⋄ ⍺ ⎕SIGNAL 1↓(⊃∊⍵),911}
+
+    ∇ {r}←AutoloadCompareFiles path;res
+      r←1
+      ⎕SE.⎕EX¨'_CompareFiles' 'CompareFiles'
+      '_CompareFiles'⎕SE.⎕NS''
+      res←⎕SE.Link.Import ⎕SE._CompareFiles(path,'APLSource')
+      :If 'Imported: '{⍺≢(≢⍺)↑⍵}res
+          ⎕←'Failed to load "CompareFiles" into ⎕SE...'
+          r←0
+      :Else
+          ⎕SE._CompareFiles.Admin.EstablishAPI 1
+          ⎕SE.CompareFiles←⎕SE._CompareFiles.API
+          ⎕SE._CompareFiles.Init ⍬
       :EndIf
     ∇
 

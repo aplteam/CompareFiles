@@ -3,7 +3,6 @@
  ns←⎕NS''
  ns.file1←''
  ns.file2←''
- ns.edit←0
  ns.edit1←0
  ns.edit2←0
  ns.caption1←''

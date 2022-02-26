@@ -7,9 +7,6 @@
  :If 0<≢parms.file2
      cmd,←' "',(parms.file2~'"'),'"'
  :EndIf
- :If 0<≢parms.file3
-     cmd,←' "',(parms.file3~'"'),'"'
- :EndIf
  result←##.RunProcess cmd
  (rc out err)←result.(ExitCode StdOut ExitCode)
 ⍝Done

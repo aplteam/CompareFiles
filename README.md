@@ -3,7 +3,7 @@
 
 ## Overview
 
-`CompareFiles` is a Dyalog APL user command that takes two or three files and feeds them to a comparison utility.
+`CompareFiles` is a Dyalog APL user command that takes two files and feeds them to a comparison utility.
 
 The comparison utility of your choice can be configured in an INI file ("ini.json5").
 
@@ -17,17 +17,17 @@ It comes with ready-to-use functions for a couple of popular comparison utilitie
 
 Note that it is pretty easy to add more.
 
-If you work on Windows we recommend CompareIt!: it's fast and has the best Interface, but be aware that it does not have three-file comparison and is Windows-only.
+If you work on Windows we recommend CompareIt!: it's fast and has a good Interface.
 
-Otherwise we recommend BeyondCompare: it is available on all major platforms and offers important features: 
-
-* Support for Git
-* Optionally 3-file comparison
-* Both edit and read-only mode for every file independently
+Otherwise we recommend BeyondCompare: though its interface is way more complex, it is fast and is available on all major platforms.
 
 However, both are not Open Source, but then they are reasonably priced.
 
-`CompareFiles` comes with an API, meaning that other tools can use it programmatically without going through Dyalog's user command framework.
+`CompareFiles` comes with an API, meaning that other utilities can use it programmatically without going through Dyalog's user command framework.
+
+### Three-file comparisons
+
+Some utilities offer a three-file comparison. This is not supported by the user command. The reason is that this comes with distinct features/parameters that make it very hard to unify them under a single umbrella, not only in terms of implementation but also in using this feature.
 
 
 ## Prerequisites
@@ -45,19 +45,57 @@ However, both are not Open Source, but then they are reasonably priced.
 
 2. Unzip the ZIP file you've downloaded into any empty folder you can write to; this folder can and should  be deleted after the installation.
 
-   Now load the workspace `InstallCompareFiles`; `⎕LX` will make sure that any necessary steps are executed. Note that this is a safety measure against you loosing stuff in case you have already installed `CompareFiles` once and added a file "user.ini" and added functions for your favourite comparison utility: the workspace will take care of that.
+   Now load the workspace `InstallCompareFiles`; `⎕LX` will make sure that any necessary steps are executed. Note that this is a safety measure against you loosing stuff in case you have already installed `CompareFiles` once and added a file "user.ini" and also functions for your favourite comparison utility: the workspace will take care of that.
 
-Any newly started instance of Dyalog 18.0 or later will now come with the user command
+Any newly started instance of Dyalog 18.0 or later will now come with the user command. 
+
+
+### The API
+
+The API is available only after executing the user command once; for that 
 
 ```
-]CompareFiles
+]CompareFiles '' ''
 ```
 
-The API will be available in `⎕SE.CompareFiles` once you start Dyalog APL.
+will suffice (although it will generate an error because no files were specified).
+
+From now on `⎕SE.CompareFiles` hosts the public interface.
+
+Alternatively you may load CompareFiles at a very early stage (but **after** Tatin was loaded!) by adding the following function to `Setup.dyalog` in the `MyUCMDs/` folder:
+
+```
+∇  {r}←AutoloadCompareFiles dummy;res
+   r←1
+   '_CompareFiles'⎕SE.⎕NS''
+   res←⎕SE.Link.Import ⎕SE._CompareFiles(GetMyUCMDsPath,'CompareFiles/APLSource')
+   :If 'Imported: '{⍺≢(≢⍺)↑⍵}res
+       ⎕←'Failed to load "CompareFiles" into ⎕SE...'
+       r←0
+   :Else
+       ⎕SE._CompareFiles.Admin.EstablishAPI 1
+       ⎕SE.CompareFiles←⎕SE._CompareFiles.API
+       ⎕SE._CompareFiles.Init ⍬
+   :EndIf
+∇
+```
+
+This function needs `GetMyUCMDsPath`, so that needs to go into `Setup.dyalog` as well:
+
+```
+∇ r←GetMyUCMDsPath
+  :If 'Win'≡3⍴1⊃# ⎕WG'APLVersion '
+      r←(⊃⎕SH'ECHO %USERPROFILE%'),'\Documents\MyUCMDs\'
+  :Else
+      r←(⊃⎕SH'echo $HOME'),'/MyUCMDs/'
+  :EndIf
+∇
+```
+
 
 ### Where is it installed?
 
-`CompareFiles` will be installed into folder `MyUCMDs/`.
+`CompareFiles` will be installed into folder `MyUCMDs/`
 
 Where to find the `MyUCMDs/` folder depends on your operating system:
 
@@ -69,32 +107,32 @@ Where to find the `MyUCMDs/` folder depends on your operating system:
 
 * On non-Windows platforms it is `$HOME/MyUCMDs/`
 
-Note that the `MyUCMDs/` folder is created by the Dyalog APL installer under Windows but not under Linux and Mac-OS, so you need to create the folder yourself on non-Windows platforms. However, after loading `InstallCompareFiles` (end therefore implicitly running `⎕LX`) there will be a folder `MyUCMds/` on any platform.
+Note that the `MyUCMDs/` folder is created by the Dyalog APL installer under Windows but not under Linux and Mac-OS. However, after loading `InstallCompareFiles` (end therefore implicitly running `⎕LX`) there will be a folder `MyUCMds/` on any platform.
 
 Note that putting `CompareFiles` into `MyUCMDS/` has both advantages and disadvantages:
 
-* Advantages 
+Advantages:
 
-  * It will be available in all suitable versions of Dyalog APL installed on your machine
-  * The user can modify and add files
+ * It will be available in all suitable versions of Dyalog APL installed on your machine
+ * The user can modify and add files
 
-* Disadvantage
+Disadvantage:
 
-  * It is a user-specific folder
+ * It is a user-specific folder
 
 
 ### The INI file
 
 The INI file comes with five pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility in on the `PATH` environment variable so that it can be found without knowing the installation folder.
 
-Note that `CompareFiles` checks whether the utilities are actually installed, and ignores those that are not. Therefore you don't need to remove utilities you are not using.
+Note that `CompareFiles` checks whether the utilities are actually available via `PATH`, and ignores those that are not. Therefore you don't need to remove utilities you have not installed.
 
 The INI file uses these entries:
 
 
 #### `EXEs`
 
-A vector of text vectors with the actual names of the comparison utilities. Used to actually start a utility.
+A vector of text vectors with the actual names of the binaries. Used to actually start a utility.
 
 
 #### `Names`
@@ -105,7 +143,7 @@ Note that comparisons are **not** case dependent.
 
 #### `Default` 
 
-By default the user is presented a list with all comparison utilities available. The one she chooses is remembered and used from then on.
+By default the user is presented a list with all comparison utilities available. The one she chooses is remembered and used from then on. This is done by assigning it to `Default` in the INI file.
 
 You may specify a different one by using the `-use=` option; this will overwrite the default.
 

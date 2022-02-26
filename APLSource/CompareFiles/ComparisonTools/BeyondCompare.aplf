@@ -7,9 +7,7 @@
  :If 0<≢parms.file2
      cmd,←' "',(parms.file2~'"'),'"'
  :EndIf
- :If 0<≢parms.file3
-     cmd,←' "',(parms.file3~'"'),'"'
- :EndIf
+
  :If 0=≢parms.caption1
      cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS parms.file1
  :Else
@@ -20,27 +18,14 @@
  :Else
      cmd,←' /title2="',(parms.caption2~'"'),'"'
  :EndIf
- :If 0<≢parms.file3
-     :If 0=≢parms.caption3
-         cmd,←' /title3=',' '~⍨⊃,/1↓⎕NPARTS parms.file3
-     :Else
-         cmd,←' /title3="',(parms.caption3~'"'),'"'
+ :If 0=+/parms.(edit1 edit2)
+     cmd,←' /ro1 /ro2'
+ :Else
+     :If 0=parms.edit1
+         cmd,←' /ro1'
      :EndIf
- :EndIf
- :If ~parms.edit
-     :If 0=+/parms.(edit1,edit2,(0<≢file3)/edit3)
-         cmd,←' /ro1 /ro2',(0<≢parms.file3)/' /ro3'
-     :Else
-         :If 0=parms.edit1
-             cmd,←' /ro1'
-         :EndIf
-         :If 0=parms.edit2
-             cmd,←' /ro2'
-         :EndIf
-         :If 0<≢parms.file3
-         :AndIf 0=parms.edit3
-             cmd,←' /ro3'
-         :EndIf
+     :If 0=parms.edit2
+         cmd,←' /ro2'
      :EndIf
  :EndIf
  result←##.RunProcess cmd
