@@ -5,8 +5,6 @@
 
 `CompareFiles` is a Dyalog APL user command that takes two files and feeds them to a comparison utility.
 
-The comparison utility of your choice can be configured in an INI file ("ini.json5").
-
 It comes with ready-to-use functions for a couple of popular comparison utilities:
 
 * BeyondCompare
@@ -15,9 +13,19 @@ It comes with ready-to-use functions for a couple of popular comparison utilitie
 * Meld
 * UltraCompare
 
-Note that it is pretty easy to add more.
+The comparison utilities are configured in ini.json5".
 
-If you work on Windows we recommend CompareIt!: it's fast and has a good Interface.
+Note that it is pretty easy to add more: enter
+
+```
+]CompareFiles -???
+```
+
+for details.
+
+A different comparison utility of your choice can be configured in an INI file "user.json5".
+
+If you work on Windows we recommend CompareIt!: it's fast and has a clean Interface.
 
 Otherwise we recommend BeyondCompare: though its interface is way more complex, it is fast and is available on all major platforms.
 
@@ -58,11 +66,13 @@ The API is available only after executing the user command once; for that
 ]CompareFiles '' ''
 ```
 
-will suffice (although it will generate an error because no files were specified).
+will suffice, although it will generate an error because no files were specified.
 
 From now on `⎕SE.CompareFiles` hosts the public interface.
 
-Alternatively you may load CompareFiles at a very early stage (but **after** Tatin was loaded!) by adding the following function to `Setup.dyalog` in the `MyUCMDs/` folder:
+Alternatively you may load CompareFiles at a very early stage (but **after** Tatin was loaded!); this is strongly recommended in order to make the API available to other user commands.
+
+You can achive this by adding the following function to `Setup.dyalog` in the `MyUCMDs/` folder:
 
 ```
 ∇  {r}←AutoloadCompareFiles dummy;res
@@ -123,9 +133,9 @@ Disadvantage:
 
 ### The INI file
 
-The INI file comes with five pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility in on the `PATH` environment variable so that it can be found without knowing the installation folder.
+The INI file comes with five pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility is available on the `PATH` environment variable, so that it can be found without knowing the installation folder.
 
-Note that `CompareFiles` checks whether the utilities are actually available via `PATH`, and ignores those that are not. Therefore you don't need to remove utilities you have not installed.
+Note that `CompareFiles` checks whether the utilities are actually both installed and available via `PATH`, and ignores those that are not. Therefore you don't need to remove utilities you have not installed.
 
 The INI file uses these entries:
 

@@ -1,5 +1,7 @@
- {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;iniFilename2;buff
+ {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;iniFilename2;buff2;buff1
  r←⍬
+ A←##.APLTreeUtils2
+ F←##.FilesAndDirs
  :If 0=⎕NC'INI'
      iniFilename←GetIniFilename
      :If 0=##.⎕NC'CiderConfig'  ⍝ Running as a User Command?
@@ -7,15 +9,14 @@
      :Else  ⍝ Opened as a Cider Project
          ⎕SE.Tatin.LoadDependencies(##.CiderConfig.HOME,'/packages')⎕SE
      :EndIf
-     A←##.APLTreeUtils2
-     F←##.FilesAndDirs
-     INI←ReadJSON5 iniFilename
+     buff1←ReadJSON5 iniFilename
      iniFilename2←(1⊃⎕NPARTS iniFilename),'user.json5'
      :If ⎕NEXISTS iniFilename2
-         buff←ReadJSON5 iniFilename2
+         buff2←ReadJSON5 iniFilename2
      :AndIf 0<≢buff.EXEs
-         INI.EXEs,←buff.EXEs
-         INI.Names,←buff.Names
+         buff1.EXEs,←buff2.EXEs
+         buff1.Names,←buff2.Names
      :EndIf
+     'INI'⎕NS buff1 ⍝ Overcome the fact that ⎕JSON always creates in #!
  :EndIf
 ⍝Done
