@@ -1,4 +1,4 @@
-'l;';l';l;k;ksaxasxx'l'l;';l'l';l    Unchanged
+';l'l;'#';#';sss    sssUnchanged
 Unchanged
 Unchanged
 This was changed
@@ -6,4 +6,5 @@ Unchanged
 Unchanged
 Unchanged
 Last line
-Added last line
+Added last line';l';l';l
+';'#;#';

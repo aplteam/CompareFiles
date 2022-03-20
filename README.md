@@ -13,7 +13,7 @@ It comes with ready-to-use functions for a couple of popular comparison utilitie
 * Meld
 * UltraCompare
 
-The comparison utilities are configured in ini.json5".
+The comparison utilities are configured in "ini.json5".
 
 Note that it is pretty easy to add more: enter
 
@@ -32,6 +32,9 @@ Otherwise we recommend BeyondCompare: though its interface is way more complex, 
 However, both are not Open Source, but then they are reasonably priced.
 
 `CompareFiles` comes with an API, meaning that other utilities can use it programmatically without going through Dyalog's user command framework.
+
+In particular user commands like [`CompareThese`](https://github.com/aplteam/]CompareThese "Link to CompareThese on GitHub")
+ and [`CompareWorkspaces`](https://github.com/aplteam/CompareWorkspaces) are using it.
 
 ### Three-file comparisons
 
@@ -105,7 +108,7 @@ This function needs `GetMyUCMDsPath`, so that needs to go into `Setup.dyalog` as
 
 ### Where is it installed?
 
-`CompareFiles` will be installed into folder `MyUCMDs/`
+`CompareFiles` will be installed into the folder `MyUCMDs/`
 
 Where to find the `MyUCMDs/` folder depends on your operating system:
 
