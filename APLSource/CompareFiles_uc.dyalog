@@ -1,7 +1,7 @@
 ﻿:Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 2.0.0 from 2022-02-26
+⍝ Version 2.0.1 from 2022-04-28
 
     ⎕IO←⎕ML←1
 
@@ -70,18 +70,18 @@
           r,←⊂'Specify two filenames as arguments. These files will then be compared with one of the'
           r,←⊂'compare utilities defined in "ini.json5" & potentially also "user.json5" - see below.'
           r,←⊂''
-          r,←⊂'Naturally utilities that are not available are ignored, and the user might select one'
-          r,←⊂'from the remaining list if there are more than just one left.'
+          r,←⊂'Naturally utilities that are not available are ignored. The user might select one from'
+          r,←⊂'the remaining list if there are more than just one left.'
           r,←⊂'Instead you may specify a comparison utility with -use= by assigning the name as'
           r,←⊂'defined in the "ini.jsn5" file. Either way, your choice will be remembered.'
           r,←⊂''
           r,←⊂'By default no file can be edited, but you can change this by specifying either -edit1'
           r,←⊂'and/or -edit2, allowing just the corresponding file to be edited. Of course this is'
           r,←⊂'true only if the chosen comparison utility is supporting this: some do not support'
-          r,←⊂'read-only, some do not.'
+          r,←⊂'read-only, some do not support editiing files.'
           r,←⊂''
-          r,←⊂'-caption1= and -caption2= can be set as caption for the comparison panes. Might have'
-          r,←⊂'no effect in case the chosen comparison tool does not support something like this.'
+          r,←⊂'-caption1= and -caption2= can be set as caption for the comparison panes. Might have no'
+          r,←⊂'effect in case the chosen comparison tool does not support something like this.'
           r,←⊂'Defaults to the name of the files.'
           r,←⊂''
           r,←⊂'The command returns a vector of two Booleans.'
@@ -89,7 +89,7 @@
           r,←⊂''
           r,←⊂'Note that you can add your favourite comparison utility; enter:'
           r,←⊂']CompareFiles -???'
-          r,←⊂'for how to do that,'
+          r,←⊂'for how to do that.'
       :Case 2
           r,←⊂'In order to add your favourite comparison utility follow this recipe:'
           r,←⊂''
