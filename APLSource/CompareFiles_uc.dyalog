@@ -1,4 +1,4 @@
-﻿:Class  CompareFiles_uc
+:Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
 ⍝ Kai Jaeger - APL Team Ltd
 ⍝ Version 2.0.1 from 2022-04-28
@@ -78,7 +78,7 @@
           r,←⊂'By default no file can be edited, but you can change this by specifying either -edit1'
           r,←⊂'and/or -edit2, allowing just the corresponding file to be edited. Of course this is'
           r,←⊂'true only if the chosen comparison utility is supporting this: some do not support'
-          r,←⊂'read-only, some do not support editiing files.'
+          r,←⊂'read-only, some do not support editing files.'
           r,←⊂''
           r,←⊂'-caption1= and -caption2= can be set as caption for the comparison panes. Might have no'
           r,←⊂'effect in case the chosen comparison tool does not support something like this.'
