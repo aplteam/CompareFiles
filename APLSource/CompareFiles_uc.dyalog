@@ -1,7 +1,7 @@
 :Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 2.0.1 from 2022-04-28
+⍝ Version 2.0.2 from 2022-07-25
 
     ⎕IO←⎕ML←1
 
@@ -12,7 +12,7 @@
       r←⎕NS''
       r.Group←'TOOLS'
       r.Name←'CompareFiles'
-      r.Parse←'2 -edit1 -edit2 -caption1= -caption2= -use='
+      r.Parse←'2s -edit1 -edit2 -caption1= -caption2= -use= -version'
       r.Desc←'Compare two files with each other.'
       ⍝Done
     ∇
@@ -25,6 +25,11 @@
       :EndIf
       C←⎕SE._CompareFiles
       CT←C.ComparisonTools
+      :If 0 Args.Switch'version'
+          r←⊃{⍺,' from ',⍵}/1↓C.Version
+          :Return
+      :EndIf
+      'Please specify two files'⎕SIGNAL 2/⍨2≠≢Args.Arguments
       C.Init ⍬
       '⍵[1] is not a file'Assert ⎕NEXISTS Args._1
       '⍵[2] is not a file'Assert ⎕NEXISTS Args._2
@@ -86,6 +91,8 @@
           r,←⊂''
           r,←⊂'The command returns a vector of two Booleans.'
           r,←⊂'A 1 indicates that the associated file has been changed.'
+          r,←⊂''
+          r,←⊂'-version returns the version number & date. If specified everything else is ignored.'
           r,←⊂''
           r,←⊂'Note that you can add your favourite comparison utility; enter:'
           r,←⊂']CompareFiles -???'
