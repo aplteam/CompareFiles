@@ -1,4 +1,6 @@
 (
+ '* 3.0.1 ⋄ 2022-07-26'
+ '  `Use` caused a VALUE ERROR under some circumstances'
  '* 3.0.0 ⋄ 2022-07-25'
  '  * Does not use a workspace anymore but text files and Tatin packages.'
  '    Note that this means it requires Tatin to be available at runtime.'
