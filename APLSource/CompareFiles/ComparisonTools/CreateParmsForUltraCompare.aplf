@@ -1,6 +1,7 @@
  ns←CreateParmsForUltraCompare
 ⍝ Creates a namespace with default parameters for UltraCompare.
  ns←⎕NS''
+ ns.name←'UltraCompare'
  ns.file1←''
  ns.file2←''
  ns.caption1←''

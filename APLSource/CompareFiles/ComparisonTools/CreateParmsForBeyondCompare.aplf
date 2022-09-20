@@ -1,6 +1,7 @@
  ns←CreateParmsForBeyondCompare
 ⍝ Creates a namespace with default parameters for BeyondCompare.
  ns←⎕NS''
+ ns.name←'BeyondCompare'
  ns.file1←''
  ns.file2←''
  ns.edit1←0

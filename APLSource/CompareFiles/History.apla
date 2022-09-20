@@ -1,6 +1,6 @@
 (
- '* 3.0.2 ⋄ 2022-08-24'
- '  * `GetMyUCMDsPath` significantly faster under Windows'
+ '* 3.0.2 ⋄ 2022-09-20'
+ '  * The `CreateParms*` functions now sets the "name" property as well'
  '* 3.0.1 ⋄ 2022-07-26'
  '  `Use` caused a VALUE ERROR under some circumstances'
  '* 3.0.0 ⋄ 2022-07-25'

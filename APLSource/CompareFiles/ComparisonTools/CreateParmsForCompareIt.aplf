@@ -1,6 +1,7 @@
  ns←CreateParmsForCompareIt
 ⍝ Creates a namespace with default parameters for CompareIt!
  ns←⎕NS''
+ ns.name←'CompareIt'
  ns.file1←''
  ns.file2←''
  ns.edit1←0
