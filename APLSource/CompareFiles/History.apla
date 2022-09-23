@@ -1,4 +1,7 @@
 (
+ '* 3.0.3 ⋄ 2022-09-21'
+ '  * It''s now possible to omit the filenames if one wants to define just the comparison utility to be used'
+ '  * Documentation of the user command was incomplete: -use= was not mentioned'
  '* 3.0.2 ⋄ 2022-09-20'
  '  * The `CreateParms*` functions now sets the "name" property as well'
  '* 3.0.1 ⋄ 2022-07-26'

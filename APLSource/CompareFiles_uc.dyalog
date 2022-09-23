@@ -1,14 +1,12 @@
 :Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 2.0.2 from 2022-07-25
+⍝ Version 2.0.3 from 2022-09-21
 
     ⎕IO←⎕ML←1
 
     ∇ r←List;res;⎕TRAP
       :Access Shared Public
-      ⍝⎕TRAP←0'S'
-      ⍝∘∘∘
       r←⎕NS''
       r.Group←'TOOLS'
       r.Name←'CompareFiles'
@@ -27,6 +25,15 @@
       CT←C.ComparisonTools
       :If 0 Args.Switch'version'
           r←⊃{⍺,' from ',⍵}/1↓C.Version
+          :Return
+      :EndIf
+      :If (,0)≢,Args.use        ⍝ "use" can be expected...
+      :AndIf 0<≢Args.use        ⍝ ... to be the name of a comparison utility (or "?")...
+      :AndIf 0 0≡Args.(_1 _2)   ⍝ ... and there are no filenames specified
+          (exe name)←C.Use Args.use
+          :If 0<≢name
+              r←'New default for comparison: ',name
+          :EndIf
           :Return
       :EndIf
       'Please specify two files'⎕SIGNAL 2/⍨2≠≢Args.Arguments
@@ -88,6 +95,10 @@
           r,←⊂'-caption1= and -caption2= can be set as caption for the comparison panes. Might have no'
           r,←⊂'effect in case the chosen comparison tool does not support something like this.'
           r,←⊂'Defaults to the name of the files.'
+          r,←⊂''
+          r,←⊂'-use= allows you to specify the name of one of the comparison utilities. If you are no'
+          r,←⊂'sure then specify -use=? and you will get a list with all utilities available.'
+          r,←⊂'You may omit the filenames if you want to set just the default comparison utility.'
           r,←⊂''
           r,←⊂'The command returns a vector of two Booleans.'
           r,←⊂'A 1 indicates that the associated file has been changed.'

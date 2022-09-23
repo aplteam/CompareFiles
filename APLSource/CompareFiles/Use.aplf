@@ -1,20 +1,12 @@
- {exe}←Use name;exes;names;default;ind;name_lc;exes_;names_
+ {exe}←Use name;exes;names;default
 ⍝ Defines the Comparison utility to be used.
 ⍝ Must be either available on the PATH environment variable or the exe must be a fully qualified path,
 ⍝ otherwise an error is thrown.
  (exes names default)←INI.(EXEs Names Default)
  'No comparison utility available/defined'Assert 0<≢exes
- name_lc←⎕C name                    ⍝ Lowercase
- ('Comparison utility "',name,'" not found')Assert(⊂name_lc)∊⎕C names
- (exes_ names_)←DropUnknownUtilities exes names
- :If (⊂name_lc)∊⎕C names_
-     exe←((⎕C names_)⍳⊂name_lc)⊃exes_
- :Else
-     ind←(⊂name_lc)⍳⊂⎕C names
-     exe←ind⊃exes
-     ⍝ Is not available on PATH, so it must be fully qualified:
-     ('Comparison utility "',name,'" not found')Assert(':'∊exe)∨'/'=1↑exe
+ (exe name)←EstablishCompareEXE name
+ :If 0<≢name
+     INI.Default←name
+     {}INI WriteJSON5 GetIniFilename
  :EndIf
- INI.Default←name
- {}INI WriteJSON5 GetIniFilename
 ⍝Done
