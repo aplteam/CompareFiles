@@ -5,9 +5,9 @@
 ⍝  * If neither is set then a list with all available utilities is compiled.
 ⍝    * If that list has just just one item it is used
 ⍝    * Otherwise the user is interrogated, unless `force` is 1 (default is 0) when the first item is returned.
-⍝ Remembers the choice via INI.Default except when force←→1 and there is more than just one.
  exe←name←''
  force←{0<⎕NC ⍵:⍎⍵ ⋄ 0}'force'
+ {}Init⍣(⊃0=⎕NC'INI')⊢⍬
  (exes names default)←INI.(EXEs Names Default)
  'No comparison utility available/defined'Assert 0<≢exes
  (exes names)←DropUnknownUtilities exes names
@@ -18,7 +18,6 @@
      ('Comparison utility "',use,'" is not available')Assert(⊂⎕C use)∊⎕C names
      ind←(⎕C names)⍳⊂⎕C use
      (exe name)←ind∘⊃¨exes names
-     saveFlag←1
  :ElseIf 0<≢default
  :AndIf (,'?')≢,use
      ind←(⎕C names)⍳⊂⎕C default
@@ -31,10 +30,10 @@
          :If force
              (exe name)←1⊃¨exes names       ⍝ There is just one, so that rules the day, but it won't be remembered
          :Else                              ⍝ We need to interrogate the user
-             ind←'Select your preferred comparison utility (will be remembered)'Select names
+             ind←'Select your preferred comparison utility (will be remembered)'CommTools.Select names
              →(0=≢ind)/0                    ⍝ She changed her mind: nothing selected
              (exe name)←ind⊃¨exes names
-             saveFlag←1
+             saveFlag←CommTools.YesOrNo'Do want to make this change permanent?'
          :EndIf
      :EndIf
  :EndIf

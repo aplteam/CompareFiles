@@ -1,4 +1,9 @@
 (
+ '* 4.0.0 ⋄ 2023-01-23'
+ '  * `CompareFiles` is now a Tatin package, and can be installed as such to become a user command.'
+ '  * The -use= modifier is now temporary only'
+ '  * Additional modifier -save added in oder to make the change of utility permanent'
+ '  * Comparison tool `WinMerge` added'
  '* 3.0.3 ⋄ 2022-09-21'
  '  * It''s now possible to omit the filenames if one wants to define just the comparison utility to be used'
  '  * Documentation of the user command was incomplete: -use= was not mentioned'

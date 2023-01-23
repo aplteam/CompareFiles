@@ -1,5 +1,8 @@
  (rc out err)←BeyondCompare parms;cmd;result
 ⍝ Function for the comparison utility BeyondCompare
+ :If 0=parms.⎕NC'use'
+     parms.use←⊃##.EstablishCompareEXE parms.name
+ :EndIf
  cmd←'"',(parms.use~'"'),'" '
  :If 0<≢parms.file1
      cmd,←'"',(parms.file1~'"'),'"'
@@ -9,12 +12,12 @@
  :EndIf
 
  :If 0=≢parms.caption1
-     cmd,←' /title1=',' '~⍨⊃,/1↓⎕NPARTS parms.file1
+     cmd,←' /title1="',(⊃,/1↓⎕NPARTS parms.file1),'"'
  :Else
      cmd,←' /title1="',(parms.caption1~'"'),'"'
  :EndIf
  :If 0=≢parms.caption2
-     cmd,←' /title2=',' '~⍨⊃,/1↓⎕NPARTS parms.file2
+     cmd,←' /title2="',(⊃,/1↓⎕NPARTS parms.file2),'"'
  :Else
      cmd,←' /title2="',(parms.caption2~'"'),'"'
  :EndIf

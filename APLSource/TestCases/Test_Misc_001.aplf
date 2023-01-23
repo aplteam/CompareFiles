@@ -5,7 +5,11 @@
 
  was←##.CompareFiles.INI.Default
  res←##.CompareFiles.Use'BeyondCompare'
- →T.GoToTidyUp 0=⎕NEXISTS res
+ →T.GoToTidyUp 0=⎕NEXISTS⊃res
+ →T.GoToTidyUp was≢##.CompareFiles.INI.Default
+
+ res←1 ##.CompareFiles.Use'BeyondCompare'
+ →T.GoToTidyUp 0=⎕NEXISTS⊃res
  →T.GoToTidyUp'BeyondCompare'≢##.CompareFiles.INI.Default
 
  R←T._OK

@@ -11,7 +11,7 @@
      list2←##.Public~'Methods' 'Public' 'GoToGitHub'
      ##.API.{⍎⍵,'←{⍺←⊣ ⋄ ⍺ ##.',⍵,' ⍵}'}¨list2
      :If (,1)≡,tellLink
-     :OrIf 1 ##.U.YesOrNo'Tell Link?'
+     :OrIf 1 CommTools.YesOrNo'Tell Link?'
          r,←⎕SE.Link.Add¨##.API.((⊂(⍕⎕THIS),'.'),¨↓⎕NL 3)
      :EndIf
  :EndIf

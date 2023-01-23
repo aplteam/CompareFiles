@@ -6,7 +6,7 @@
  :If batchFlag
      →0,R←T._NoBatchTest
  :EndIf
-  :If 'Win'≢##.APLTreeUtils2.GetOperatingSystem ⍬
+  :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
      →0,R←T._WindowsOnly
  :EndIf
 

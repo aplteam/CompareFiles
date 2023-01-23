@@ -1,22 +1,22 @@
- {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;iniFilename2;buff2;buff1
+ {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;path;buff
  r←⍬
- A←##.APLTreeUtils2
- F←##.FilesAndDirs
- :If 0=⎕NC'INI'
-     iniFilename←GetIniFilename
-     :If 0=##.⎕NC'CiderConfig'  ⍝ Running as a User Command?
-         ⎕SE.Tatin.LoadDependencies(GetMyUCMDsPath,'/CompareFiles/packages')⎕SE
+ A←APLTreeUtils2 ⋄ F←FilesAndDirs
+ :If ~⎕NEXISTS path←GetPathToINI
+     3 ⎕MKDIR path
+ :EndIf
+ :If ~⎕NEXISTS path,'ini.json5'
+     ⍝ The user command has not been properly installed yet
+     :If 0=##.⎕NC'CiderConfig'  ⍝ Package?!
+         iniFilename←TatinVars.HOME,'/ini.json5'
      :Else  ⍝ Opened as a Cider Project
-         ⎕SE.Tatin.LoadDependencies(##.CiderConfig.HOME,'/packages')⎕SE
+         iniFilename←##.CiderConfig.HOME,'/',iniFilename
      :EndIf
-     buff1←ReadJSON5 iniFilename
-     iniFilename2←(1⊃⎕NPARTS iniFilename),'user.json5'
-     :If ⎕NEXISTS iniFilename2
-         buff2←ReadJSON5 iniFilename2
-     :AndIf 0<≢buff.EXEs
-         buff1.EXEs,←buff2.EXEs
-         buff1.Names,←buff2.Names
-     :EndIf
-     'INI'⎕NS buff1 ⍝ Overcome the fact that ⎕JSON always creates in #!
+     path ⎕NCOPY⍠('IfExists' 'Replace')⊢iniFilename
+ :EndIf
+ :If LoadUserDefinedComparisonUtilities GetPathToINI
+ :OrIf 0=⎕NC'INI'
+     iniFilename←GetIniFilename
+     buff←ReadJSON5 iniFilename
+     'INI'⎕NS buff  ⍝ Overcome the fact that ⎕JSON always creates in #!
  :EndIf
 ⍝Done

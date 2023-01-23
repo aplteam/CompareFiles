@@ -16,7 +16,6 @@
  ∆Show msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForUltraCompare
- parms.(use name)←⎕SE.CompareFiles.EstablishCompareEXE'UltraCompare'
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
  parms.file2←##.CiderConfig.HOME,'/TestData/file2 with blank.txt'
  (rc out err)←⎕SE.CompareFiles.Compare parms

@@ -6,7 +6,7 @@
  :If batchFlag
      →0,R←T._NoBatchTest
  :EndIf
- :If 'Win'≢##.APLTreeUtils2.GetOperatingSystem ⍬
+ :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
      →0,R←T._WindowsOnly
  :EndIf
 
@@ -16,7 +16,6 @@
  ∆Show msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForCompareIt
- parms.(use name)←⎕SE.CompareFiles.EstablishCompareEXE'CompareIt'
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
  parms.file2←##.CiderConfig.HOME,'/TestData/file2 with blank.txt'
  (rc out err)←⎕SE.CompareFiles.Compare parms

@@ -12,6 +12,7 @@ It comes with ready-to-use functions for a couple of popular comparison utilitie
 * KDiff3
 * Meld
 * UltraCompare
+* WinMerge
 
 The comparison utilities are configured in "ini.json5".
 
@@ -31,14 +32,25 @@ Otherwise we recommend BeyondCompare: though its interface is way more complex, 
 
 However, both are not Open Source, but then they are reasonably priced.
 
-`CompareFiles` comes with an API, meaning that other utilities can use it programmatically without going through Dyalog's user command framework.
-
-In particular user commands like [`CompareThese`](https://github.com/aplteam/]CompareThese "Link to CompareThese on GitHub")
- and [`CompareWorkspaces`](https://github.com/aplteam/CompareWorkspaces) are using it.
+`CompareFiles` comes with an API, meaning that other utilities can use it programmatically without going through Dyalog's user command framework. For example, the user command 
+[`APLGit2`](https://github.com/aplteam/APLGit2) is using it.
 
 ### Three-file comparisons
 
 Some utilities offer a three-file comparison. This is not supported by the user command. The reason is that this comes with distinct features/parameters that make it very hard to unify them under a single umbrella, not only in terms of implementation but also in using this feature.
+
+
+## Examples
+
+
+```
+]CompareFiles /path/to/file1 '/path/to/file 1'
+]CompareFiles /path/to/file1 '/path/to/file 1' -use=WinMerge
+]CompareFiles /path/to/file1 '/path/to/file 1' -use=WinMerge -save
+]CompareFiles /path/to/file1 '/path/to/file 1' -use=?
+]CompareFiles /path/to/file1 '/path/to/file 1' -caption1-Left -caption2-'Right side'
+]CompareFiles /path/to/file1 '/path/to/file 1' -edit1 -edit2
+```
 
 
 ## Prerequisites
@@ -52,13 +64,13 @@ Some utilities offer a three-file comparison. This is not supported by the user 
 
 ### Instructions
 
-1. Download the latest release of `CompareFiles` from <https://github.com/aplteam/CompareFiles/releases>
+Execute this and you are done:
 
-2. Unzip the ZIP file you've downloaded into any empty folder you can write to; this folder can and should  be deleted after the installation.
+```
+]Tatin.InstallPackages [tatin]comparefiles [myucmds]
+```
 
-   Now load the workspace `InstallCompareFiles`; `⎕LX` will make sure that any necessary steps are executed. Note that this is a safety measure against you loosing stuff in case you have already installed `CompareFiles` once and added a file "user.ini" and also functions for your favourite comparison utility: the workspace will take care of that.
-
-Any newly started instance of Dyalog 18.0 or later will now come with the user command. 
+Any newly started instance of Dyalog 18.0 or later will now come with the user command. In an already running instance executing `]ureset` will do, though this will only make the user command as such available, not its API.
 
 
 ### The API
@@ -66,99 +78,66 @@ Any newly started instance of Dyalog 18.0 or later will now come with the user c
 The API is available only after executing the user command once; for that 
 
 ```
-]CompareFiles '' ''
+]CompareFiles -version
 ```
 
-will suffice, although it will generate an error because no files were specified.
+will suffice.
 
-From now on `⎕SE.CompareFiles` hosts the public interface.
+From now on the public interface is available via `⎕SE.CompareFiles`.
 
-Alternatively you may load CompareFiles at a very early stage (but **after** Tatin was loaded!); this is strongly recommended in order to make the API available to other user commands.
+Alternatively you may load `CompareFiles` at a very early stage (but **after** Tatin was loaded!); this is recommended in order to make the API available to other user commands.
 
-You can achive this by adding the following function to `Setup.dyalog` in the `MyUCMDs/` folder:
-
-```
-∇  {r}←AutoloadCompareFiles dummy;res
-   r←1
-   '_CompareFiles'⎕SE.⎕NS''
-   res←⎕SE.Link.Import ⎕SE._CompareFiles(GetMyUCMDsPath,'CompareFiles/APLSource')
-   :If 'Imported: '{⍺≢(≢⍺)↑⍵}res
-       ⎕←'Failed to load "CompareFiles" into ⎕SE...'
-       r←0
-   :Else
-       ⎕SE._CompareFiles.Admin.EstablishAPI 1
-       ⎕SE.CompareFiles←⎕SE._CompareFiles.API
-       ⎕SE._CompareFiles.Init ⍬
-   :EndIf
-∇
-```
-
-This function needs `GetMyUCMDsPath`, so that needs to go into `Setup.dyalog` as well:
+You can achieve this by adding the following line to `setup.dyalog` in the `MyUCMDs/` folder:
 
 ```
-∇ r←GetMyUCMDsPath
-  :If 'Win'≡3⍴1⊃# ⎕WG'APLVersion '
-      r←(⊃⎕SH'ECHO %USERPROFILE%'),'\Documents\MyUCMDs\'
-  :Else
-      r←(⊃⎕SH'echo $HOME'),'/MyUCMDs/'
-  :EndIf
-∇
+⎕SE.Tatin.LoadDependencies '[MyUCMDs]/CompareFiles' ⎕SE
 ```
 
+For details regarding the MyUCMDs/ folder and the script `setup.dyalog` within that folder refer to the article [Dyalog User Commands](https://aplwiki.com/wiki/Dyalog_User_Commands "Link to an article on the APL wiki") on the APL wiki.
 
-### Where is it installed?
+#### How to use the API
 
-`CompareFiles` will be installed into the folder `MyUCMDs/`
+First ask for a parameter space for the comparison utility you are going to use. For example, assuming that you want to use WinMerge:
 
-Where to find the `MyUCMDs/` folder depends on your operating system:
+```
+      p←⎕SE.CompareFiles.ComparisonTools.CreateParmsForWinMerge
+      p.file1←'/path/to/file1'
+      p.file1←'/path/to/file2'     
+      ⎕SE.CompareFiles.ComparisonTools.WinMerge p
+```
 
-* Under Windows it is
+If you want captions that are different from the filenames then set `caption1` and `caption2` accordingly.
 
-  ``` 
-  (2 ⎕nq # 'GetEnvironment' 'USERPROFILE'),'\Documents\MyUCMDs\'
-  ```
-
-* On non-Windows platforms it is `$HOME/MyUCMDs/`
-
-Note that the `MyUCMDs/` folder is created by the Dyalog APL installer under Windows but not under Linux and Mac-OS. However, after loading `InstallCompareFiles` (end therefore implicitly running `⎕LX`) there will be a folder `MyUCMds/` on any platform.
-
-Note that putting `CompareFiles` into `MyUCMDS/` has both advantages and disadvantages:
-
-Advantages:
-
- * It will be available in all suitable versions of Dyalog APL installed on your machine
- * The user can modify and add files
-
-Disadvantage:
-
- * It is a user-specific folder
+If you want to be able to edit the files from within WinMerge set `edit1` and/or `edit2` accordingly.
 
 
 ### The INI file
 
-The INI file comes with five pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility is available on the `PATH` environment variable, so that it can be found without knowing the installation folder.
+The INI file comes with several pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility is available on the `PATH` environment variable, so that it can be found without knowing the installation folder.
 
 Note that `CompareFiles` checks whether the utilities are actually both installed and available via `PATH`, and ignores those that are not. Therefore you don't need to remove utilities you have not installed.
 
-The INI file uses these entries:
+The INI file can be found in the folder that is returned by `⎕se.CompareFiles.GetPathToINI`.
+
+It uses these entries:
 
 
 #### `EXEs`
 
-A vector of text vectors with the actual names of the binaries. Used to actually start a utility.
+A vector of text vectors with the actual names of the binaries; no path, `CompareFiles` relies on the environment variable `PATH`. This is used to actually start a utility.
 
 
 #### `Names`
 
-A vector of text vectors with alias names for the comparison utilities. These are used to communicate with the user (when presenting a list to choose from) and for specifying the `-use=` option of the user command `]CompareFiles`.
+A vector of text vectors with alias names for the comparison utilities. These are used to communicate with the user (when presenting a list to choose from) and for specifying the `-use=` modifier of the user command `]CompareFiles`.
 
-Note that comparisons are **not** case dependent.
+Note that comparisons for alias names of comparison utilities are **not** case dependent.
 
 #### `Default` 
 
-By default the user is presented a list with all comparison utilities available. The one she chooses is remembered and used from then on. This is done by assigning it to `Default` in the INI file.
+By default the user is presented a list of all comparison utilities available. The one she chooses is remembered and used from then on. This is done by assigning it to `Default` in the INI file.
 
-You may specify a different one by using the `-use=` option; this will overwrite the default.
+You may specify a different one by using the `-use=` option; however, this will **not** overwrite the default: for that you must specify the `-save` modifier.
 
 At any point you can force the user command to give you again a list with all available utilities by specifying `-use=?`
 

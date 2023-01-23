@@ -1,2 +1,2 @@
- r←CreateParmsForBeyondCompare
- r←##.##.ComparisonTools.CreateParmsForBeyondCompare
+ ns←CreateParmsForBeyondCompare
+ ns←##.##.ComparisonTools.CreateParmsForBeyondCompare

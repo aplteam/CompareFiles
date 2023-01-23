@@ -1,0 +1,2 @@
+ ns←CreateParmsForUltraCompare
+ ns←##.##.ComparisonTools.CreateParmsForUltraCompare

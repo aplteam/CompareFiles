@@ -1,5 +1,8 @@
 (rc out err)←UltraCompare parms;cmd;result
 ⍝ Function for the comparison utility UltraCompare
+ :If 0=parms.⎕NC'use'
+     parms.use←⊃##.EstablishCompareEXE parms.name
+ :EndIf
  cmd←'"',(parms.use~'"'),'" '
  :If 0<≢parms.file1
      cmd,←'"',(parms.file1~'"'),'"'

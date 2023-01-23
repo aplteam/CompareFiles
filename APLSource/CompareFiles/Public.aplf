@@ -1,8 +1,7 @@
- r←Public;l
- l←' '~⍨¨↓'C'ComparisonTools.⎕NL 3
- r←'ComparisonTools.'∘,¨('CreateParmsFor'∘{⍺≡(≢⍺)↑⍵}¨l)/l
- r,←'ComparisonTools.'∘,¨('CreateParmsFor'∘{⍺≢(≢⍺)↑⍵}¨l)/l
+ r←Public
+ r←'ComparisonTools.'∘,¨' '~⍨¨↓ComparisonTools.⎕NL 3
  r,←⊂'Compare'
  r,←⊂'EstablishCompareEXE'
+ r,←⊂'GetPathToINI'
  r,←⊂'Use'
  r,←⊂'Version'

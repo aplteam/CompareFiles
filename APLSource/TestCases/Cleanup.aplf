@@ -1,5 +1,5 @@
  Cleanup;F
- F←##.FilesAndDirs
+ F←FilesAndDirs
  F.DeleteFile F.ListFiles ##.CiderConfig.HOME,'/TestData/*.bak'   ⍝ *.bak files are created by UltraCompare
  F.DeleteFile F.ListFiles ##.CiderConfig.HOME,'/TestData/*.txt'
  ⎕EX'∆PYTHON_IS_AVAILABLE'

@@ -13,7 +13,6 @@
  ∆Show msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForBeyondCompare
- parms.(use name)←⎕SE.CompareFiles.EstablishCompareEXE'BeyondCompare'
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
  parms.file2←##.CiderConfig.HOME,'/TestData/file2 with blank.txt'
  parms.edit1←1

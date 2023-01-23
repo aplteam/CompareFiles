@@ -1,11 +1,13 @@
  (rc out err)←CompareIt parms;cmd;result
 ⍝ Function for the comparison utility CompareIt!
-⍝ Note: CompareIt! does not support three-file comparisons.
+ :If 0=parms.⎕NC'use'
+     parms.use←⊃##.EstablishCompareEXE parms.name
+ :EndIf
  cmd←'"',(parms.use~'"'),'" '
  :If 0<≢parms.file1
      cmd,←'"',(parms.file1~'"'),'"'
      :If 0=≢parms.caption1
-         cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS parms.file1
+         cmd,←' /="',(⊃,/1↓⎕NPARTS parms.file1),'"'
      :Else
          cmd,←' /="',(parms.caption1~'"'),'"'
      :EndIf
@@ -13,7 +15,7 @@
  :If 0<≢parms.file2
      cmd,←' "',(parms.file2~'"'),'"'
      :If 0=≢parms.caption2
-         cmd,←' /=',' '~⍨⊃,/1↓⎕NPARTS parms.file2
+         cmd,←' /="',(⊃,/1↓⎕NPARTS parms.file2),'"'
      :Else
          cmd,←' /="',(parms.caption2~'"'),'"'
      :EndIf

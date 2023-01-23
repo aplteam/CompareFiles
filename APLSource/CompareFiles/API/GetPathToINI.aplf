@@ -1,0 +1,2 @@
+ r←GetPathToINI
+ r←##.GetPathToINI
