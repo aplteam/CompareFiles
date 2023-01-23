@@ -28,9 +28,6 @@
           :AndIf 0<≢Args.use        ⍝ ... to be the name of a comparison utility (or "?")...
           :AndIf 0 0≡Args.(_1 _2)   ⍝ ... and there are no filenames specified
               (exe name)←C.Use Args.use
-              :If 0<≢name
-                  r←'New default for comparison: ',name
-              :EndIf
               :Return
           :EndIf
           'Please specify two files'⎕SIGNAL 2/⍨2≠≢Args.Arguments

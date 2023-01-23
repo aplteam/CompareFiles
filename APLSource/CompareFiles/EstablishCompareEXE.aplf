@@ -1,4 +1,4 @@
- (exe name)←{force}EstablishCompareEXE use;ind;exes;names;default;saveFlag
+ (exe name)←{force}EstablishCompareEXE use;ind;exes;names;default;saveFlag;i
 ⍝ Tries to establish which exe/name to use for the comparison.\\
 ⍝  * If `use` is not empty it is used
 ⍝  * Otherwise INI.Default is checked: if it is not empty it is used
@@ -30,6 +30,9 @@
          :If force
              (exe name)←1⊃¨exes names       ⍝ There is just one, so that rules the day, but it won't be remembered
          :Else                              ⍝ We need to interrogate the user
+             :If 0<≢i←⍸names≡¨⊂default
+                 names[i]←⊂(i⊃names),' *'
+             :EndIf
              ind←'Select your preferred comparison utility (will be remembered)'CommTools.Select names
              →(0=≢ind)/0                    ⍝ She changed her mind: nothing selected
              (exe name)←ind⊃¨exes names
