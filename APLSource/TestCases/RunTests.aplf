@@ -3,7 +3,7 @@
  (rc log)←T.Run 1
 
  :If 0 ∆YesOrNo'View CodeCoverage report?'
-     htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport T.codeCoverage.filename
-     ##.APLTreeUtils2.GoToWebPage htmlFilename
+     htmlFilename←CodeCoverage.ProcessDataAndCreateReport T.codeCoverage.filename
+     APLTreeUtils2.GoToWebPage htmlFilename
  :EndIf
  ⍝Done
