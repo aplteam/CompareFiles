@@ -1,36 +1,26 @@
- {r}←{version}Make batch;T;zipFilename;res;path;cfg;M;C;currentVersion;caption;options;choice;name
-⍝ Creates a new version of `CompareFiles` in the Dist/ folder.\\
-⍝  * The user is asked whether the better version of the script is copied from either `MyUCMDs/` or the project (if they differ)
-⍝  * The user is also asked whether the newly built version should be installed in `MyUCMDs/`\\
-⍝ If `batch` is 1 (default is 0) none of this happens.\\
-⍝ `version` can be either a full-fledged version number or something like "+0.0.1".
-⍝ If no left argument is provided the user is questioned.\\
-⍝ Returns always ⍬\\
-⍝ Version 4.0.0 ⋄ 2023-01-19 ⋄ Kai Jaeger
- r←⍬
- M←⎕SE.MakeHelpers ⋄ T←⎕SE.Tatin ⋄ C←##.CiderConfig
- name←'CompareFiles'
- '⍺ must be a Boolean'M.##.Assert(,⊂batch)∊0 1
- path←C.HOME,'/Dist/'
- cfg←M.GetPackageCfg C.HOME
- :If 0=⎕NC'version'
-     currentVersion←M.DropBuildNumber cfg.version
-     caption←'Bump version of ',cfg.name,' (currently on ',currentVersion,')'
-     options←'No action' 'Bump patch number' 'Bump minor number' 'Bump major number'
-     choice←caption 0 1 M.Select options
-     version←choice⊃'' '+0.0.1' '+0.1.0' '+1.0.0'
+ Make flag;M;C;path;zipFilename;res;version;cfg;parms
+⍝ "Make" a new version of this project which is a User Command
+ :If flag
+     M←⎕SE.MakeHelpers
+     C←##.CiderConfig
+     path←C.HOME,'/',C.CIDER.distributionFolder
+     cfg←⎕JSON⍠('Dialect' 'JSON5')⊢⊃⎕NGET C.HOME,'/apl-package.json'
+     M.FetchLaterUserCommand'Snippets_UC.dyalog'cfg C('[MyUCMDs]CompareFiles')
+     version←M.CompileVersionNumberPattern cfg
+     M.RecreateFolder path
+     parms←⎕SE.Tatin.CreateBuildParms C.HOME
+     parms.targetPath←path
+     parms.version←version
+     zipFilename←⎕SE.Tatin.BuildPackage parms
+     ⎕←'*** New version build successfully:',M.CR,'   ',zipFilename
+     :If 1 M.YesOrNo'Install new version in MyUCMDs?'
+         {}M.##.FilesAndDirs.RmDirByForce M.GetMyUCMDsFolder'Snippets'
+         res←⎕SE.Tatin.InstallPackages zipFilename'[MyUCMDs]'
+         ⎕←'  New version installed as user command in MyUCMDs/: ',res
+         :If M.##.FilesAndDirs.IsDir ##.CiderConfig.HOME,'/.snippets'
+         :AndIf 1 M.YesOrNo'Would you like to copy the folder .snippets/ from the project to MyUCMDs/ ?'
+             (##.CiderConfig.HOME,'/.snippets')M.CopyTo M.GetMyUCMDsFolder'Snippets'
+         :EndIf
+     :EndIf
  :EndIf
- :If ~batch
-     M.FetchLaterUserCommand(name,'_uc.dyalog')cfg C('[MyUCMDs]',name)
- :EndIf
- M.CreateAPI ##.CompareFiles ##.CompareFiles.Public
- M.RecreateFolder path
- zipFilename←T.BuildPackage C.HOME path''
- ⎕←'*** New version build successfully:',(⎕UCS 13),'   ',zipFilename
- :If ~batch
- :AndIf 1 M.YesOrNo'Install new version as user command in MyUCMDs?'
-     M.RecreateFolder M.GetMyUCMDsFolder'/',name
-     res←⎕SE.Tatin.InstallPackages zipFilename('[MyUCMDs]/',name)
-     ⎕←'  New version installed as user command in MyUCMDs/: ',res
- :EndIf
-⍝Done
+ ⍝Done

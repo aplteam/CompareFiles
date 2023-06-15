@@ -6,14 +6,14 @@
  :If batchFlag
      →0,R←T._NoBatchTest
  :EndIf
-  :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
+ :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
      →0,R←T._WindowsOnly
  :EndIf
 
  msg←''
  msg,←⊂'This test case needs you: it fires up CompareIt without parameters.'
  msg,←⊂'Neither file should be editable.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -21,7 +21,7 @@
  cmd,←' -use=CompareIt'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "CompareIt" started and no file was editable?'
+ :If 1 CommTools.YesOrNo'Was "CompareIt" started and no file was editable?'
  :AndIf 0=+/r
      R←T._OK
  :EndIf

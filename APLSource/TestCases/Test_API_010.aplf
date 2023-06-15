@@ -13,7 +13,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up CompareIt without parameters.'
  msg,←⊂'No file should be editable; please check.'
- ∆Show msg
+ CommTools.Pause msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForCompareIt
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
@@ -21,6 +21,6 @@
  (rc out err)←⎕SE.CompareFiles.Compare parms
  Assert 0=rc
 
- :If 1 ∆YesOrNo'Was "CompareIt" started?'
+ :If 1 CommTools.YesOrNo'Was "CompareIt" started?'
      R←T._OK
  :EndIf

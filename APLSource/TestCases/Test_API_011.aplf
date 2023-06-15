@@ -13,7 +13,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up KDiff3 without parameters.'
  msg,←⊂'No file should be editable; please check.'
- ∆Show msg
+ CommTools.Pause msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForKDiff3
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
@@ -21,6 +21,6 @@
  (rc out err)←⎕SE.CompareFiles.Compare parms
  Assert 0=rc
 
- :If 1 ∆YesOrNo'Was "KDiff3" started?'
+ :If 1 CommTools.YesOrNo'Was "KDiff3" started?'
      R←T._OK
  :EndIf

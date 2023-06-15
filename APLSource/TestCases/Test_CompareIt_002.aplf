@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up CompareIt with parameters'
  msg,←⊂'Both files should be editable; make sure you change both.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -20,7 +20,7 @@
  cmd,←' -use=CompareIt'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "CompareIt" started with the expected titles, and both files got changed?'
+ :If 1 CommTools.YesOrNo'Was "CompareIt" started with the expected titles, and both files got changed?'
  :AndIf 2=+/r
      R←T._OK
  :EndIf

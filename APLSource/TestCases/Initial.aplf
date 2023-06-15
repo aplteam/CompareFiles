@@ -2,7 +2,7 @@
  msg←'The version of CompareFiles in ⎕SE is not identical with the project version'
  msg Assert(2⊃⎕SE.CompareFiles.Version)≡(2⊃##.CompareFiles.Version)
  msg←'The tests require the version in ⎕SE to be up-to-date.'
- :If 1 ∆YesOrNo msg,' Would you like to carry on?'
+ :If 1 CommTools.YesOrNo msg,' Would you like to carry on?'
      r←1
      folder←##.CiderConfig.HOME,'/TestData/'
      folder{(⍺,⍵,'.txt')⎕NCOPY⍠('IfExists' 'Replace')⊣⍺,⍵,'.orig'}'file1 with blank'

@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up WinMerge without parameters.'
  msg,←⊂'No file should be editable.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -18,6 +18,6 @@
  cmd,←' -use=winmerge'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "WinMerge" started?'
+ :If 1 CommTools.YesOrNo'Was "WinMerge" started?'
      R←T._OK
  :EndIf

@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up KDiff3 with specific titles.'
  msg,←⊂'The captions should be: "one" and "with space"'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -20,6 +20,6 @@
  cmd,←' -use=KDiff3'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "KDiff3" started with the correct titles?'
+ :If 1 CommTools.YesOrNo'Was "KDiff3" started with the correct titles?'
      R←T._OK
  :EndIf

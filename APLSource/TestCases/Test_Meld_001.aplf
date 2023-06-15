@@ -6,14 +6,14 @@
  :If batchFlag
      →0,R←T._NoBatchTest
  :EndIf
-  :If ~∆PYTHON_IS_AVAILABLE
+ :If ~∆PYTHON_IS_AVAILABLE
      →0,R←T._NotApplicable
  :EndIf
 
  msg←''
  msg,←⊂'This test case needs you: it fires up Meld without parameters.'
  msg,←⊂'Both files should be editable.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -21,6 +21,6 @@
  cmd,←' -use=Meld'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "Meld" started?'
+ :If 1 CommTools.YesOrNo'Was "Meld" started?'
      R←T._OK
  :EndIf

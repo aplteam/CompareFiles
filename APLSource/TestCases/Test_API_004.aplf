@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up BeyondCompare.'
  msg,←⊂'Only the right pane should be editable; please check.'
- ∆Show msg
+ CommTools.Pause msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForBeyondCompare
  parms.file1←##.CiderConfig.HOME,'/TestData/file1 with blank.txt'
@@ -19,6 +19,6 @@
  (rc out err)←⎕SE.CompareFiles.Compare parms
  Assert 0=rc
 
- :If 1 ∆YesOrNo'Was "BeyondCompare" started, and the right pane was editable?'
+ :If 1 CommTools.YesOrNo'Was "BeyondCompare" started, and the right pane was editable?'
      R←T._OK
  :EndIf

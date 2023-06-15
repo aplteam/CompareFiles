@@ -13,7 +13,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up Meld without parameters.'
  msg,←⊂'Both files will be editable since Meld does not offer read-only.'
- ∆Show msg
+ CommTools.Pause msg
 
  parms←⎕SE.CompareFiles.ComparisonTools.CreateParmsForMeld
  parms.(use name)←⎕SE.CompareFiles.EstablishCompareEXE'Meld'
@@ -22,6 +22,6 @@
  (rc out err)←⎕SE.CompareFiles.Compare parms
  Assert 0=rc
 
- :If 1 ∆YesOrNo'Was "Meld" started?'
+ :If 1 CommTools.YesOrNo'Was "Meld" started?'
      R←T._OK
  :EndIf

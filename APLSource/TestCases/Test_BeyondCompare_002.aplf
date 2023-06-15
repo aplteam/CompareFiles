@@ -6,14 +6,14 @@
  :If batchFlag
      →0,R←T._NoBatchTest
  :EndIf
-  :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
+ :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
      →0,R←T._WindowsOnly
  :EndIf
 
  msg←''
  msg,←⊂'This test case needs you: it fires up BeyondCompare.'
  msg,←⊂'Both files should be editable; change and save.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -23,7 +23,7 @@
  cmd,←' -use=BeyondCompare'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "BeyondCompare" started and got all files changed?'
+ :If 1 CommTools.YesOrNo'Was "BeyondCompare" started and got all files changed?'
  :AndIf 2=+/r
      R←T._OK
  :EndIf

@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up BeyondCompare without parameters.'
  msg,←⊂'No file should be editable; please check.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -18,7 +18,7 @@
  cmd,←' -use=BeyondCompare'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "BeyondCompare" started, and neither file was editable?'
+ :If 1 CommTools.YesOrNo'Was "BeyondCompare" started, and neither file was editable?'
  :AndIf 0=+/r
      R←T._OK
  :EndIf

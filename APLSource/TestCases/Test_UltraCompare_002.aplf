@@ -10,7 +10,7 @@
  msg←''
  msg,←⊂'This test case needs you: it fires up UltraCompare with specific titles.'
  msg,←⊂'Sets "First" and "with space" as pane titles.'
- ∆Show msg
+ CommTools.Pause msg
 
  cmd←'CompareFiles'
  cmd,←' ''',##.CiderConfig.HOME,'/TestData/file1 with blank.txt'''
@@ -20,6 +20,6 @@
  cmd,←' -use=UltraCompare'
  r←⎕SE.UCMD cmd
 
- :If 1 ∆YesOrNo'Was "UltraCompare" started? with the correct titles?'
+ :If 1 CommTools.YesOrNo'Was "UltraCompare" started? with the correct titles?'
      R←T._OK
  :EndIf
