@@ -17,10 +17,6 @@
          {}M.##.FilesAndDirs.RmDirByForce M.GetMyUCMDsFolder'Snippets'
          res←⎕SE.Tatin.InstallPackages zipFilename'[MyUCMDs]'
          ⎕←'  New version installed as user command in MyUCMDs/: ',res
-         :If M.##.FilesAndDirs.IsDir ##.CiderConfig.HOME,'/.snippets'
-         :AndIf 1 M.YesOrNo'Would you like to copy the folder .snippets/ from the project to MyUCMDs/ ?'
-             (##.CiderConfig.HOME,'/.snippets')M.CopyTo M.GetMyUCMDsFolder'Snippets'
-         :EndIf
      :EndIf
  :EndIf
  ⍝Done
