@@ -8,13 +8,14 @@
      M.FetchLaterUserCommand'Snippets_UC.dyalog'cfg C('[MyUCMDs]CompareFiles')
      version←M.CompileVersionNumberPattern cfg
      M.RecreateFolder path
+     {}M.CreateAPIfromCFG(⍎'##.',cfg.name)cfg
      parms←⎕SE.Tatin.CreateBuildParms C.HOME
      parms.targetPath←path
      parms.version←version
      zipFilename←⎕SE.Tatin.BuildPackage parms
      ⎕←'*** New version build successfully:',M.CR,'   ',zipFilename
      :If 1 M.YesOrNo'Install new version in MyUCMDs?'
-         {}M.##.FilesAndDirs.RmDirByForce M.GetMyUCMDsFolder'Snippets'
+         {}M.##.FilesAndDirs.RmDirByForce M.GetMyUCMDsFolder cfg.name
          res←⎕SE.Tatin.InstallPackages zipFilename'[MyUCMDs]'
          ⎕←'  New version installed as user command in MyUCMDs/: ',res
      :EndIf
