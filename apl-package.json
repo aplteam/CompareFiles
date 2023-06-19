@@ -19,5 +19,5 @@
   source: "APLSource/CompareFiles",
   tags: "file-comparison,comparison-utilities",
   userCommandScript: "APLSource/CompareFiles_uc.dyalog",
-  version: "4.0.0+166",
+  version: "4.0.0+168",
 }
