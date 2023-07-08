@@ -1,4 +1,6 @@
 (
+ '* 4.0.1 ⋄ 2023-07-08'
+ '  * Documentation and README corrected and polished'
  '* 4.0.0 ⋄ 2023-01-23'
  '  * `CompareFiles` is now a Tatin package, and can be installed as such to become a user command.'
  '  * The -use= modifier is now temporary only'

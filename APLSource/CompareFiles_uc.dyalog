@@ -18,6 +18,9 @@
     ∇ r←Run(Cmd Args);fn1;fn2;fn3;parms;stdOut;rc;stdErr;orig1;orig2;orig3;exe;name
       :Access Shared Public
       r←''
+      :If 0=⎕SE.⎕NC'CompareFiles'
+          {}⎕SE.Tatin.LoadDependencies(⊃⎕NPARTS ##.SourceFile)⎕SE
+      :EndIf
       C←⎕SE.CompareFiles
       CT←C.##.ComparisonTools
       C.##.Init ⍬
@@ -38,8 +41,8 @@
           :EndIf
           (exe name)←C.EstablishCompareEXE{0≡⍵:'' ⋄ ⍵}Args.use
           →(0=≢exe)/0
-          ('Missing: function "CreateParmsFor',name,'"')Assert 3=⎕se.CompareFiles.ComparisonTools.⎕NC'CreateParmsFor',name
-          parms←⎕se.CompareFiles.ComparisonTools.⍎'CreateParmsFor',name
+          ('Missing: function "CreateParmsFor',name,'"')Assert 3=⎕SE.CompareFiles.ComparisonTools.⎕NC'CreateParmsFor',name
+          parms←⎕SE.CompareFiles.ComparisonTools.⍎'CreateParmsFor',name
           parms.use←exe
           parms.name←name
           parms.file1←'Please select first filename'GetFilename Args._1
@@ -93,8 +96,8 @@
           r,←⊂'      sure then specify -use=? and you will get a list with all utilities available.'
           r,←⊂'      You may omit the filenames if you want to set just the default comparison utility.'
           r,←⊂''
-          r,←⊂'-save This flag can be used to make the change permanent issued by passing the -use.'
-          r,←⊂'parameter. This implies that it is ignored in case -use= was not set.'
+          r,←⊂'-save This flag can be used to make the change permanent issued by specifying -use='
+          r,←⊂'      This implies that it is ignored in case -use= was not set.'
           r,←⊂''
           r,←⊂'The command returns a vector of two Booleans.'
           r,←⊂'A 1 indicates that the associated file has been changed.'
