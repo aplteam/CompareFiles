@@ -1,4 +1,7 @@
 (
+ '* 4.0.2 ⋄ 2023-07-10'
+ '  * The function "APLGit2.CompareCommits" established the hashes to be compared if they were not specified,'
+ '    but it did not return them. They are returnd now, enabling ]CompareFiles to show them in the captions.'
  '* 4.0.1 ⋄ 2023-07-08'
  '  * Documentation and README corrected and polished'
  '* 4.0.0 ⋄ 2023-01-23'
