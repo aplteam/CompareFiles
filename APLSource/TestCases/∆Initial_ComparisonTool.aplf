@@ -1,0 +1,13 @@
+ r←{flag}∆Initial_ComparisonTool tool;path
+ r←0
+ flag←{0<⎕NC ⍵:⍎⍵ ⋄ 1}'flag'
+ 'No comparison tool specified?!'Assert 0<≢tool
+ :If flag
+     :Trap 911
+         path←##.CompareFiles.EstablishCompareEXE tool
+         r←0<≢path
+     :EndTrap
+ :EndIf
+ :If r=0
+     ⎕←tool,' appears to be not installed, therefore the associated tests cannot be carried out.'
+ :EndIf

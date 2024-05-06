@@ -5,7 +5,7 @@
 
  rf←#.CompareFiles.CompareFiles
 
- v←rf.Version
+ v←2⊃rf.Version
  v←{⍵/⍨3>+\'.'=⍵}v      ⍝ Remove...
  v←(¯1+v⍳'+')↑v ⍝ ... build ID
  f←~5≤⍴v

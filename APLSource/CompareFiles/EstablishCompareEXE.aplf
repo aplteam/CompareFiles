@@ -9,6 +9,9 @@
  force←{0<⎕NC ⍵:⍎⍵ ⋄ 0}'force'
  {}Init⍣(⊃0=⎕NC'INI')⊢⍬
  (exes names default)←INI.(EXEs Names Default)
+ :If 'Win'≡A.GetOperatingSystem ⍬
+     exes←{'.exe'≡⎕C ¯4↑⍵:⍵ ⋄ ⍵,'.exe'}¨exes
+ :EndIf
  'No comparison utility available/defined'Assert 0<≢exes
  (exes names)←DropUnknownUtilities exes names
  'No comparison utility found'Assert 0<≢exes

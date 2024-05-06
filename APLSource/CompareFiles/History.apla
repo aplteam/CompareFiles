@@ -1,4 +1,11 @@
 (
+ '* 4.1.0 ⋄ 2024-05-05'
+ '  * Work now with .NET (rather than only .NET Framework) and uses .NET on all platforms when available'
+ '* 4.0.0 ⋄ 2024-03-30'
+ '  * When the user is not allowed to edit anything at all, APL does not wait anymore for the comparison utility'
+ '* 4.0.2 ⋄ 2023-10-07    '
+ '  * Bug fix for Linux and Mac OS'
+ '  * Dependencies updated'
  '* 4.0.1 ⋄ 2023-07-08'
  '  * Documentation and README corrected and polished'
  '* 4.0.0 ⋄ 2023-01-23'

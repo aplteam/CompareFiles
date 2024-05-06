@@ -1,0 +1,4 @@
+ r←Initial_Meld
+ r←0
+ r←∆PYTHON_IS_AVAILABLE ∆Initial_ComparisonTool'Meld'
+⍝Done

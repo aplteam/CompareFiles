@@ -30,6 +30,10 @@
          cmd,←' /R2'
      :EndIf
  :EndIf
- result←##.RunProcess cmd
- (rc out err)←result.(ExitCode StdOut ExitCode)
+ result←(parms.(0=edit1+edit2))##.RunProcess cmd
+ :If parms.(0<edit1+edit2)
+     (rc out err)←result.(ExitCode StdOut ExitCode)
+ :Else
+     rc←0 ⋄ out←err←''
+ :EndIf
 ⍝Done

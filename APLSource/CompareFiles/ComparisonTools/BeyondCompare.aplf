@@ -31,9 +31,13 @@
          cmd,←' /ro2'
      :EndIf
  :EndIf
- result←##.RunProcess cmd
- (rc out err)←result.(ExitCode StdOut ExitCode)
- :If rc∊0 1 2 11 12 13 14 101
-     rc←0
+ result←(parms.(0=edit1+edit2))##.RunProcess cmd
+ :If parms.(0>edit1+edit2)
+     (rc out err)←result.(ExitCode StdOut ExitCode)
+     :If rc∊0 1 2 11 12 13 14 101
+         rc←0
+     :EndIf
+ :Else
+     rc←0 ⋄ out←err←''
  :EndIf
 ⍝Done

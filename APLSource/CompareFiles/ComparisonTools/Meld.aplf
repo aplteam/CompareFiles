@@ -1,5 +1,7 @@
  (rc out err)←Meld parms;cmd;result
 ⍝ Function for the comparison utility Meld
+⍝ Note that Meld does **not** support tab-specific captions at the time of writing (April 2024)
+⍝ despite the existence of --label - this is different and cannot be used for tab-specific captions.
  :If 0=parms.⎕NC'use'
      parms.use←⊃##.EstablishCompareEXE parms.name
  :EndIf

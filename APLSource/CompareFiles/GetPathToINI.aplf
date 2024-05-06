@@ -1,11 +1,11 @@
  r←GetPathToINI
- :Select ⎕C APLTreeUtils2.GetOperatingSystem ''
+ :Select ⎕C APLTreeUtils2.GetOperatingSystem''
  :Case 'win'
      r←(2 ⎕NQ #'GetEnvironment' 'AppData'),'/Dyalog/'
  :Case 'mac'
      r←'/Applications/Dyalog/'
  :Case 'lin'
-     r←'/Applications/mdyalog/'
+     r←(⊃⎕SH'echo $HOME'),'/dyalog/files/'
  :Else
      'The current operating system is not supported'⎕SIGNAL 11
  :EndSelect
