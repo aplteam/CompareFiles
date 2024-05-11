@@ -1,22 +1,21 @@
- {r}←Init dummy;sourceFilename;iniFilename;flag;ind;uff;path;buff
+ {r}←Init dummy;sourceFilename;flag;ind;uff;path;configFilename
  r←⍬
  A←APLTreeUtils2 ⋄ F←FilesAndDirs
- :If ~⎕NEXISTS path←GetPathToINI
+ :If ~⎕NEXISTS path←GetPathToConfig
      3 ⎕MKDIR path
  :EndIf
- :If ~⎕NEXISTS path,'ini.json5'
+ :If ~⎕NEXISTS GetConfigFilename
      ⍝ The user command has not been properly installed yet
      :If 0=##.⎕NC'CiderConfig'  ⍝ Package?!
-         iniFilename←TatinVars.HOME,'/ini.json5'
+         configFilename←TatinVars.HOME,'/comparefiles-config.json5'
      :Else  ⍝ Opened as a Cider Project
-         iniFilename←##.CiderConfig.HOME,'/',iniFilename
+         configFilename←##.CiderConfig.HOME,'/comparefiles-config.json5'
      :EndIf
-     path ⎕NCOPY⍠('IfExists' 'Replace')⊢iniFilename
+     path ⎕NCOPY⍠('IfExists' 'Replace')⊢configFilename
  :EndIf
- :If LoadUserDefinedComparisonUtilities GetPathToINI
- :OrIf 0=⎕NC'INI'
-     iniFilename←GetIniFilename
-     buff←ReadJSON5 iniFilename
-     'INI'⎕NS buff  ⍝ Overcome the fact that ⎕JSON always creates in #!
+ :If LoadUserDefinedComparisonUtilities GetPathToConfig
+ :OrIf 0=⎕NC'CONFIG'
+     configFilename←GetConfigFilename
+     EstablishConfig configFilename
  :EndIf
 ⍝Done

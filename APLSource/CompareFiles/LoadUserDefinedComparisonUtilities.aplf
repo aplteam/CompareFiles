@@ -1,5 +1,5 @@
  r←LoadUserDefinedComparisonUtilities path;list;names;res;qdmx;into;parms;into2
-⍝ Checks whether there are comparison utilities in the path that holds the INI file that need to be loaded into ⎕SE.\\
+⍝ Checks whether there are comparison utilities in the path that hold the config file that need to be loaded into ⎕SE.\\
 ⍝ Returns 1 in case something was loaded and 0 otherwise
  r←0
  :If 0<≢list←F.ListFiles path,'/*.aplf'

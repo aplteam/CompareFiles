@@ -4,5 +4,7 @@
  ns.name←'Meld'
  ns.file1←''
  ns.file2←''
+ ns.⎕FX'r←edit1' 'r←1'      ⍝ Because Meld does not ...
+ ns.⎕FX'r←edit2' 'r←1'      ⍝ ... support read-only
  ns.⎕FX'r←∆List' 'r←{⍵,[1.5]⍎¨⍵}⎕NL-2' 'r←r[⍋↑r[;1];]'
 ⍝Done

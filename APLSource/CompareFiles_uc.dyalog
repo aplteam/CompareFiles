@@ -1,7 +1,7 @@
-﻿:Class  CompareFiles_uc
+:Class  CompareFiles_uc
 ⍝ User Command script for "CompareFiles".
 ⍝ Kai Jaeger - APL Team Ltd
-⍝ Version 3.0.0 from 2023-01-23
+⍝ Version 4.0.0 from 2024-05-09
 
     ⎕IO←⎕ML←1
 
@@ -10,7 +10,7 @@
       r←⎕NS''
       r.Group←'TOOLS'
       r.Name←'CompareFiles'
-      r.Parse←'2s -edit1 -edit2 -caption1= -caption2= -use= -save -version'
+      r.Parse←'2s -edit1 -edit2 -caption1= -caption2= -use= -save -version -config -editconfig'
       r.Desc←'Compare two files with each other.'
       ⍝Done
     ∇
@@ -21,11 +21,15 @@
       :If 0=⎕SE.⎕NC'CompareFiles'
           {}⎕SE.Tatin.LoadDependencies(⊃⎕NPARTS ##.SourceFile)⎕SE
       :EndIf
-      C←⎕SE.CompareFiles
+      C←GetRefToCompareFiles ⍬
       CT←C.##.ComparisonTools
       C.##.Init ⍬
       :If 0 Args.Switch'version'
           r←C.Version
+      :ElseIf 0 Args.Switch'config'
+          r←C.##.F.NormalizePath C.##.GetConfigFilename
+      :ElseIf 0 Args.Switch'editconfig'
+          r←C.##.EditConfigFile ⍬
       :Else
           :If (,0)≢,Args.use        ⍝ "use" can be expected...
           :AndIf 0<≢Args.use        ⍝ ... to be the name of a comparison utility (or "?")...
@@ -41,10 +45,10 @@
           :EndIf
           (exe name)←C.EstablishCompareEXE{0≡⍵:'' ⋄ ⍵}Args.use
           →(0=≢exe)/0
-          ('Missing: function "CreateParmsFor',name,'"')Assert 3=⎕SE.CompareFiles.ComparisonTools.⎕NC'CreateParmsFor',name
-          parms←⎕SE.CompareFiles.ComparisonTools.⍎'CreateParmsFor',name
+          ('Missing: function "CreateParmsFor',({⍵↑⍨¯1+⍵⍳' '}name),'"')Assert 3=C.##.ComparisonTools.⎕NC'CreateParmsFor',{⍵↑⍨¯1+⍵⍳' '}name
+          parms←C.ComparisonTools.⍎'CreateParmsFor',{⍵↑⍨¯1+⍵⍳' '}name
           parms.use←exe
-          parms.name←name
+          parms.name←{⍵↑⍨¯1+⍵⍳' '}name
           parms.file1←'Please select first filename'GetFilename Args._1
           →(0=≢parms.file1)/0
           parms.file2←'Please select second filename'GetFilename Args._2
@@ -52,7 +56,14 @@
           parms.(file1 file2)←{'expand'C.##.FilesAndDirs.NormalizePath ⍵}¨parms.(file1 file2)
           parms.(caption1 caption2)←parms.(file1 file2){0≡⍵:⍺ ⋄ ⍵}¨Args.(caption1 caption2)
           (orig1 orig2)←ReadFile¨parms.(file1 file2)
-          parms.(edit1 edit2)←Args.(edit1 edit2)
+          :If 2=parms.⎕NC'edit1'
+          :AndIf parms.edit1≠Args.edit1
+              parms.edit1←Args.edit1
+          :EndIf
+          :If 2=parms.⎕NC'edit1'
+          :AndIf parms.edit2≠Args.edit2
+              parms.edit2←Args.edit2
+          :EndIf
           parms.saveFlag←Args.save
           (rc stdOut stdErr)←C.Compare parms
           stdOut Assert rc=0
@@ -68,6 +79,19 @@
       :EndIf
     ∇
 
+    ∇ C←GetRefToCompareFiles dummy;ind;linkList
+      :If 0<⎕NC'⎕SE.Link'
+      :AndIf 2=⍴⍴linkList←⎕SE.Link.Status''
+      :AndIf 0<≢linkList←1↓linkList
+          ind←linkList[;1]⍳⊂'#.CompareFiles'
+      :AndIf (≢linkList)≥ind
+      :AndIf 1 ⎕SE.CompareFiles.##.CommTools.YesOrNo'Execute code in #.CompareFiles rather than ⎕SE.CompareFiles?'
+          C←#.CompareFiles.CompareFiles.API
+      :Else
+          C←⎕SE.CompareFiles
+      :EndIf
+    ∇
+
     ∇ r←level Help Cmd
       :Access Shared Public
       r←''
@@ -76,12 +100,12 @@
           r,←⊂List.Desc
       :Case 1
           r,←⊂'Specify two filenames as arguments. These files will then be compared with one of the'
-          r,←⊂'compare utilities defined in "ini.json5" - see below.'
+          r,←⊂'compare utilities defined in the config file - see below.'
           r,←⊂''
           r,←⊂'Naturally utilities that are not available are ignored. The user might select one from'
-          r,←⊂'the remaining list if there are more than just one left.'
+          r,←⊂'the remaining list if there is more than just one left.'
           r,←⊂'Instead you may specify a comparison utility with -use= by assigning the name as'
-          r,←⊂'defined in the "ini.json5" file. Either way, your choice will be remembered.'
+          r,←⊂'defined in the config file.'
           r,←⊂''
           r,←⊂'By default no file can be edited, but you can change this by specifying either -edit1'
           r,←⊂'and/or -edit2, allowing just the corresponding file to be edited. Of course this is'
@@ -97,27 +121,27 @@
           r,←⊂'      You may omit the filenames if you want to set just the default comparison utility.'
           r,←⊂''
           r,←⊂'-save This flag can be used to make the change permanent issued by specifying -use='
-          r,←⊂'      This implies that it is ignored in case -use= was not set.'
+          r,←⊂'      This implies that -save is ignored in case -use= was not set.'
           r,←⊂''
           r,←⊂'The command returns a vector of two Booleans.'
           r,←⊂'A 1 indicates that the associated file has been changed.'
           r,←⊂''
-          r,←⊂'-version returns the version number. If specified everything else is ignored.'
-          r,←⊂''
-          r,←⊂'Note that you can add your favourite comparison utility; enter:'
-          r,←⊂']CompareFiles -???'
-          r,←⊂'for how to do that.'
+          r,←⊂'-version     Returns the version number. If specified everything else is ignored.'
+          r,←⊂'-config      Returns the full path of the config file'
+          r,←⊂'-editconfig  Allows you to edit the config file'
       :Case 2
           r,←⊂'In order to add your favourite comparison utility follow this recipe:'
           r,←⊂''
-          r,←⊂' 1. Execute ⎕SE.CompareFiles.GetPathToINI in order to find out where the INI file lives'
-          r,←⊂' 2. Edit the ini file ini.json5 in that folder and add your favourite utility'
-          r,←⊂' 3. For a utility "Foo" add a function Foo.aplf to that folder'
-          r,←⊂' 4. Add also a function CreateParmsForFoo.aplf to that folder'
+          r,←⊂' 1. Edit the config file and add your favourite utility'
+          r,←⊂' 2. For a utility "Foo" add a function Foo.aplf to the folder that hosts the config file'
+          r,←⊂' 3. Add also a function CreateParmsForFoo.aplf to that folder as well'
           r,←⊂''
           r,←⊂'Investigate the pre-defined comparison utility "CompareIt" in ⎕SE.CompareFiles.ComparisonTools'
           r,←⊂'in order to find out what "Foo.aplf" and "CreateParmsForFoo.aplf" are expected to look like.'
-          r,←⊂'(Not all comparison utilities require all options, but CompareIt does)'
+          r,←⊂''
+          r,←⊂'Not all comparison utilities require/support all options, but CompareIt does:'
+          r,←⊂' * There are two flags for toggling the left & right pane between edit/read-only'
+          r,←⊂' * There are two options for setting the caption of the left and right pane'
       :EndSelect
       r,←(level=0)/⊂']',Cmd,' -??  ⍝ for syntax details'
     ∇

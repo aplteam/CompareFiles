@@ -1,1 +1,0 @@
-{  Default: "CompareIt",  EXEs: [    "BCompare",    "wincmp3",    "kdiff3",    "uc",    "meld",    "WinMergeU",  ],  Names: [    "BeyondCompare",    "CompareIt",    "KDiff3",    "UltraCompare",    "Meld",    "WinMerge",  ],}

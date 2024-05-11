@@ -1,6 +1,6 @@
 {
   api: "API",
-  assets: "ini.json5",
+  assets: "comparefiles-config.json5",
   description: "Cover for comparison utilities",
   documentation: "",
   files: "",
@@ -19,5 +19,5 @@
   source: "APLSource/CompareFiles",
   tags: "file-comparison,comparison-utilities",
   userCommandScript: "APLSource/CompareFiles_uc.dyalog",
-  version: "4.1.0+174",
+  version: "5.0.0+185",
 }

@@ -1,14 +1,14 @@
  (exe name)←{force}EstablishCompareEXE use;ind;exes;names;default;saveFlag;i
 ⍝ Tries to establish which exe/name to use for the comparison.\\
 ⍝  * If `use` is not empty it is used
-⍝  * Otherwise INI.Default is checked: if it is not empty it is used
+⍝  * Otherwise CONFIG.Default is checked: if it is not empty it is used
 ⍝  * If neither is set then a list with all available utilities is compiled.
 ⍝    * If that list has just just one item it is used
 ⍝    * Otherwise the user is interrogated, unless `force` is 1 (default is 0) when the first item is returned.
  exe←name←''
  force←{0<⎕NC ⍵:⍎⍵ ⋄ 0}'force'
- {}Init⍣(⊃0=⎕NC'INI')⊢⍬
- (exes names default)←INI.(EXEs Names Default)
+ {}Init⍣(⊃0=⎕NC'CONFIG')⊢⍬
+ (exes names default)←GetFromConfig'EXEs' 'Names' 'Default'
  :If 'Win'≡A.GetOperatingSystem ⍬
      exes←{'.exe'≡⎕C ¯4↑⍵:⍵ ⋄ ⍵,'.exe'}¨exes
  :EndIf
@@ -24,7 +24,7 @@
  :ElseIf 0<≢default
  :AndIf (,'?')≢,use
      ind←(⎕C names)⍳⊂⎕C default
-     'Default definition in INI file is invalid'Assert ind≤≢exes
+     'Default definition in configuration file is invalid'Assert ind≤≢exes
      (exe name)←ind⊃¨exes names
  :Else
      :If 1=≢exes
@@ -44,7 +44,7 @@
      :EndIf
  :EndIf
  :If saveFlag
-     INI.Default←name
-     INI WriteJSON5 GetIniFilename
+     ⍎'CONFIG.',(A.GetOperatingSystem ⍬),'.Default←''',name,''''
+     CONFIG WriteJSON5 GetConfigFilename
  :EndIf
 ⍝Done

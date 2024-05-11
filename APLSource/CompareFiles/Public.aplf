@@ -2,6 +2,6 @@
  r←'ComparisonTools.'∘,¨' '~⍨¨↓ComparisonTools.⎕NL 3
  r,←⊂'Compare'
  r,←⊂'EstablishCompareEXE'
- r,←⊂'GetPathToINI'
+ r,←⊂'GetPathToConfig'
  r,←⊂'Use'
  r,←⊂'Version'

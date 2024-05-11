@@ -1,2 +1,0 @@
- iniFilename←GetIniFilename
- iniFilename←GetPathToINI,'ini.json5'
