@@ -5,5 +5,9 @@
  folder←##.CiderConfig.HOME,'/TestData/'
  folder{(⍺,⍵,'.txt')⎕NCOPY⍠('IfExists' 'Replace')⊣⍺,⍵,'.orig'}'file1 with blank'
  folder{(⍺,⍵,'.txt')⎕NCOPY⍠('IfExists' 'Replace')⊣⍺,⍵,'.orig'}'file2 with blank'
- ∆PYTHON_IS_AVAILABLE←0<≢⊃⎕SH'python --version'
+ ∆PYTHON_IS_AVAILABLE←0<≢⊃{11::0 ⋄ ⎕SH ⍵}'python --version'
+ :If 0<⎕SE.⎕NC'CompareFiles.DEVELOPMENT'
+     ⎕SE.CompareFiles.DEVELOPMENT_was←⎕SE.CompareFiles.DEVELOPMENT
+ :EndIf
+ ⎕SE.CompareFiles.DEVELOPMENT←2
 ⍝Done

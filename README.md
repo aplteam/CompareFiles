@@ -17,17 +17,16 @@ It comes with ready-to-use functions for a couple of popular comparison utilitie
 
 * BeyondCompare
 * CompareIt!
-* KDiff3
 * Meld
 * WinMerge
 
-The comparison utilities are configured in "comparefiles-ini.json5" which is copied into a folder in the user's home folder:
+The comparison utilities are configured in `comparefiles-ini.json5` which is copied into a folder in the user's home folder:
 
 ```
 .config/dyalog/compareFiles/
 ```
 
-Note that it is pretty easy to add more: enter
+It is pretty easy to add more: enter
 
 ```
 ]CompareFiles -???
@@ -35,8 +34,20 @@ Note that it is pretty easy to add more: enter
 
 for details.
 
+With version 5 the name of the ini file was changed from `ini.json5` to `comparefiles-ini.json5`. The location of the INI file was changed as well: from a folder `aplteam/CompareFiles` in either `%APPDATA%` on Windows or `/Applications/mdyalog/` on Linux or `/Applications/Dyalog` on Mac OS to `.config/dyalog/aplteam/CompareFilescomparefiles-ini.json5` in the user's home folder.
+
 
 ## How to start
+
+### Installation
+
+For version 18.0, 18.2 and 19.0 install `CompareFiles` into `[MyUCMDs]`:
+
+```
+]InstallPackage [tatin]CompareFiles [MyUCMDs]
+```
+
+### Which one?!
 
 If you work on Windows we recommend [WinMerge](https://winmerge.org/?lang=en "Link to the WinMerge homepage"): it's fast and has a clean Interface.
 
@@ -113,9 +124,10 @@ If you want to be able to edit the files from within `WinMerge` set `p.edit1` an
 
 ## The configuration file
 
-The configuration file comes with several pre-defined comparison utilities. If you are using one of them then you only have to make sure that the  path to that utility is available on the `PATH` environment variable, so that it can be found without knowing the installation folder.
+The configuration file comes with several pre-defined comparison utilities. If you are using one of them then you only have to make sure that the path to that utility is available on the `PATH` environment variable, so that it can be found without knowing the installation folder.
 
 Alternatively you can specify the full path to the executable in the configuration file.
+However, make sure that use either use `/` as folder separator or double the backslashes: `\\`.
 
 Note that `CompareFiles` checks whether the utilities are actually available, and ignores those that are not. Therefore you don't need to remove utilities you have not installed.
 
@@ -152,5 +164,20 @@ Adding a comparison utility is pretty easy; for details enter:
 ]CompareFiles -???
 ```
 
+
+
+## Other Comparison Utilities
+
+### KDiff3
+
+The project has been abandoned for many years. 
+
+The required functions remain available, but since a bug on Mac OS was discovered (KDiff3 cannot deal with filenames with a space in it on Mac OS) the KDiff3-specific test cases were deactivated, and it's not supported "offically" anymore.
+
+### UltraCompare
+
+Requires a payed license. When the trial period expired I asked them for a free license and did not get one.
+
+The required functions remain available, but the UltraCompare-specific test cases were removed, and it's not supported "offically" anymore.
 
 

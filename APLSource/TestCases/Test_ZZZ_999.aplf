@@ -1,5 +1,5 @@
  R←Test_ZZZ_999(stopFlag batchFlag);v;n;d;xml;rf;f;f2;⎕TRAP
-⍝ Check the "Version" function and publish.config.
+⍝ Check the "Version" function
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
  R←T._Failed
 
@@ -7,7 +7,7 @@
 
  v←2⊃rf.Version
  v←{⍵/⍨3>+\'.'=⍵}v      ⍝ Remove...
- v←(¯1+v⍳'+')↑v ⍝ ... build ID
+ v←(¯1+v⍳'+')↑v         ⍝ ... build ID
  f←~5≤⍴v
  f∨←2≠'.'+.=v
  f∨←~∧/⎕D∊⍨v~'.'

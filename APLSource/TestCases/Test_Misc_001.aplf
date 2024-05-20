@@ -3,14 +3,14 @@
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
  R←T._Failed
 
- was←##.CompareFiles....Default
+ was←∊##.CompareFiles.GetFromConfig'Default'
  res←##.CompareFiles.Use'BeyondCompare'
  →T.GoToTidyUp 0=⎕NEXISTS⊃res
- →T.GoToTidyUp was≢##.CompareFiles.....Default
+ →T.GoToTidyUp was≢∊##.CompareFiles.GetFromConfig'Default'
 
  res←1 ##.CompareFiles.Use'BeyondCompare'
  →T.GoToTidyUp 0=⎕NEXISTS⊃res
- →T.GoToTidyUp'BeyondCompare'≢##.CompareFiles....Default
+ →T.GoToTidyUp'BeyondCompare'≢∊##.CompareFiles.GetFromConfig'Default'
 
  R←T._OK
 

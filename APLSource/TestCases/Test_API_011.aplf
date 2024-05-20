@@ -3,11 +3,10 @@
  ⎕TRAP←(999 'C' '. ⍝ Deliberate error')(0 'N')
  R←T._Failed
 
+ →0,R←T._Inactive
+
  :If batchFlag
      →0,R←T._NoBatchTest
- :EndIf
- :If ~∆PYTHON_IS_AVAILABLE
-     →0,R←T._NotApplicable
  :EndIf
 
  msg←''

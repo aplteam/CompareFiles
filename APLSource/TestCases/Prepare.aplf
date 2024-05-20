@@ -9,6 +9,12 @@
  testPath←##.CiderConfig.HOME,'/TestResults'
  testFilename←testPath,'/CodeCoverage'
  flag←0
+ :If 0=⎕SE.CompareFiles.⎕NC'DEVELOPMENT'
+     ∆DEVELOPMENT_was←⍬
+ :Else
+     ∆DEVELOPMENT_was←⎕SE.CompareFiles.DEVELOPMENT
+ :EndIf
+ ⎕SE.CompareFiles.DEVELOPMENT←0 CommTools.YesOrNo'Execute code in #.CompareFiles rather than ⎕SE.CompareFiles?'
  :If ⎕NEXISTS testPath
      :If ⎕NEXISTS testFilename,'.profile'
          ind←('Code Coverage' 0 1)CommTools.Select'Append' 'Replace' 'Neither'

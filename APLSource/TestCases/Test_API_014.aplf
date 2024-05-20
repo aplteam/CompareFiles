@@ -7,6 +7,10 @@
      →0,R←T._NoBatchTest
  :EndIf
 
+ :If 'Win'≢APLTreeUtils2.GetOperatingSystem ⍬
+     →0,R←T._LinuxOrMacOnly
+ :EndIf
+
  msg←''
  msg,←⊂'This test case needs you: it fires up WinMerge without parameters.'
  msg,←⊂'No file will be editable.'

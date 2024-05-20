@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Coverage</title>
+<meta charset="utf-8"/>
+<style>
+@media screen{
+    html {background-color: #FFFFF0;}
+body {
+    font-size: 16px;
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    margin: 1em;
+}
+th, td {padding: 5px 10px;}
+th {text-align: left;}
+h1, h2, h3, h4, h5, h6 {color: #424242;}
+h1 {font-size: 22px;}
+h2 {font-size: 18px; margin-top: 2em; margin-bottom:0.3em;}
+tbody tr:nth-child(even) {background-color: #F0F0F0;}
+tbody tr:nth-child(odd) {background-color: #FAFAFA;}
+th {background-color: #E6E6E6;color: #424242;}
+table {border: silver 1px solid; font-size: 14px;font-family: APLFont, monospace;}
+code , code a {font-size: 14px; font-family: APLFont, monospace;}
+code.header {
+    font-size: 16px; 
+    font-family: APLFont, monospace; 
+    margin: 1.5em 0.5em 0 0.5em; 
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1px silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 0.5em 0.5em 0.5em 0.5em;
+    padding: 0.5em;
+}
+div.code-block.missing {
+    background-color: #fa605254;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+ul li, ol li {margin: 0.7em 0.2em;}
+.float-right {float:right;}
+.no-underline {    text-decoration :none;}
+.top-links {font-size:20px; padding-left: 0.6em;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5px; padding-top:0; font-size: 9px;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 0.5em; padding: 0.5em;}
+}
+@media print{@page {size: portrait}
+@page {
+    margin: 1cm 1cm 1cm 1.75cm;
+    @bottom-right {
+        content: counter(page) " / " counter(pages);
+  }
+}
+body {
+    font: 12pt "Times New Roman", Times, serif;
+    line-height: 1.2;
+     /* CSS3 filter, at the moment Webkit only. Prefix it for future implementations */
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%); /* future-proof */
+}
+h1 {font-size: 18pt;}
+h2 {font-size: 16pt; margin-top: 10pt; margin-bottom: 3pt;}
+th, td {padding: 2pt 3pt;}
+th {text-align: left;background-color: #DBDBDB;}
+tbody tr:nth-child(odd) {background-color: #EDEDED;}
+table {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+}
+div.keep-together {break-inside: avoid; break-before:auto;}
+table {border: silver 1pt solid;}
+code , code a {font-size: 8pt; font-family: APLFont, monospace;}
+code.header {
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+    margin: 7pt 3pt 0 10pt;
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1pt silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 4pt 4pt 4pt 4pt;
+    padding: 4pt;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+a {text-decoration: none;color: black;}
+ul li, ol li {margin: 8pt 3pt;}
+.no-print {display:none;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5pt; padding-top:0; font-size: 6pt;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 8px; padding: 8px;}
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.js"></script>
+</head>
+<body>
+<h1 id="top">Coverage Report</h1>
+<p>Watched: 55 fns/opr within <code>#.CompareFiles.CompareFiles</code></p>
+<p>The test suite was executed 2 times:</p>
+<table>
+<thead>
+<tr><th>Executed at</th><th>APLVersion</th><th>Memory (MB)</th></tr>
+</thead>
+<tbody>
+<tr><td>2024-05-15 20:56:29</td><td>Linux-64 ⋄ 19.0.48958.0 ⋄ S ⋄ Development ⋄ Unicode</td><td>116</td></tr>
+<tr><td>2024-05-18 09:36:50</td><td>Linux-64 ⋄ 19.0.48958.0 ⋄ S ⋄ Development ⋄ Unicode</td><td>116</td></tr>
+</tbody>
+</table>
+<p>Overall 45% of the testable code is covered.</p>
+<p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are ignored)</p>
+<p>22 of the fns/opr are 100% covered.</p>
+<div id="partly-covered" class="keep-together">
+<table id="percent">
+<thead>
+<tr><th style="text-align:left;">Function/Operator</th><th style="text-align:left;">Lines not executed</th><th style="text-align:left;">Coverage</th><th style="text-align:right;">≢</th></tr>
+</thead>
+<tbody>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.CreateAPI</td><td>10←≢4-8,10-14</td><td>0</td><td>10</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.EditConfigFile</td><td>19←≢1-10,12-13,15-17,19,22-24</td><td>0</td><td>19</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.EstablishAPIForNewFunctions</td><td>5←≢1-4,6</td><td>0</td><td>5</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.EstablishConfig</td><td>2, 3</td><td>0</td><td>2</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.GetMyUCMDsPath</td><td>1, 2, 4</td><td>0</td><td>3</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.Public</td><td>6←≢1-6</td><td>0</td><td>6</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.ReadJSON5</td><td>1, 2</td><td>0</td><td>2</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.API.GetPathToConfig</td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.API.Version</td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CreateParmsForCompareIt</td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CreateParmsForWinMerge</td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.Admin.EstablishAPI</td><td>16←≢2-7,10-11,13-18,20,23</td><td>0</td><td>16</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CompareIt</td><td>23←≢2-3,5-9,11,14-17,19,22-23,25-26,28-29,32-34,36</td><td>0</td><td>23</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CreateParmsForCompareIt</td><td>9←≢2-10</td><td>0</td><td>9</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CreateParmsForWinMerge</td><td>9←≢2-10</td><td>0</td><td>9</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.WinMerge</td><td>25←≢2-3,5-7,9-10,12-17,19-20,22-23,25,27-28,30,32-34,36</td><td>0</td><td>25</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.UC.GetMyUCMDsPath</td><td>1, 2, 4</td><td>0</td><td>3</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.UC.Help</td><td>49←≢1-48,50</td><td>0</td><td>49</td></tr>
+<tr class="uncovered"><td>#.CompareFiles.CompareFiles.UC.List</td><td>5←≢1-5</td><td>0</td><td>5</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.LoadUserDefinedComparisonUtilities</td><td>15←≢5-17,19-20</td><td>12</td><td>17</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.UC.GetFilename</td><td>11←≢4-10,12-14,16</td><td>21</td><td>14</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.EstablishCompareEXE</td><td>18←≢12,24-27,29-30,32-36,38-41,46-47</td><td>47</td><td>34</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.ComparisonTools.BeyondCompare</td><td>10←≢4,14,19,26-27,29-30,35-37</td><td>62</td><td>26</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.Compare</td><td>2, 5, 8</td><td>63</td><td>8</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.DropUnknownUtilities</td><td>7←≢9-11,23-26</td><td>67</td><td>21</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.GetPathToConfig</td><td>3, 5, 9</td><td>67</td><td>9</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.Init</td><td>6←≢8-11,13,18</td><td>71</td><td>14</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.RunProcess</td><td>13←≢13,39-48,52-53</td><td>71</td><td>45</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.UC.GetRefToCompareFiles</td><td>7, 14, 17</td><td>75</td><td>12</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.UC.ReadFile</td><td>4</td><td>75</td><td>4</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.ComparisonTools.KDiff3</td><td>3, 10, 18</td><td>83</td><td>18</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.ComparisonTools.Meld</td><td>5</td><td>89</td><td>9</td></tr>
+<tr><td>#.CompareFiles.CompareFiles.UC.Run</td><td>7←≢3,9,11,13,18-19,46</td><td>98</td><td>51</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.Assert</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.GetConfigFilename</td><td></td><td>100</td><td>1</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.GetFromConfig</td><td></td><td>100</td><td>5</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.Use</td><td></td><td>100</td><td>9</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.Version</td><td></td><td>100</td><td>1</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.WriteJSON5</td><td></td><td>100</td><td>2</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.Compare</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.EstablishCompareEXE</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.Use</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.BeyondCompare</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CompareIt</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CreateParmsForBeyondCompare</td><td></td><td>100</td><td>1</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CreateParmsForKDiff3</td><td></td><td>100</td><td>1</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.CreateParmsForMeld</td><td></td><td>100</td><td>1</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.KDiff3</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.Meld</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.API.ComparisonTools.WinMerge</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CreateParmsForBeyondCompare</td><td></td><td>100</td><td>9</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CreateParmsForKDiff3</td><td></td><td>100</td><td>9</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.ComparisonTools.CreateParmsForMeld</td><td></td><td>100</td><td>7</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.UC.Assert</td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td>#.CompareFiles.CompareFiles.UC.LowercaseIfWindows</td><td></td><td>100</td><td>1</td></tr>
+</tbody>
+</table>
+</div>
+<script>
+$(document).ready(function() {
+    var oTable;
+    oTable = $("#percent").DataTable( {
+        paging:   false,
+        ordering: true,
+        info:     true,
+        fixedHeader: true,
+        order: [2,"asc"],
+        dom: "Bft",
+        drawCallback: function( settings ) {
+             var api = this.api();
+             $('.header[id^="listing_"]').next().addBack().css("display","none");
+             api.rows( {page:"current"} ).data().each(function(data){
+              id = data[0];
+              id = id.match(/"(\#.*?)"/);
+              if (id){$(id[1]).next().addBack().css("display","block");}
+             })
+        },      
+        buttons: [
+        {
+            text: "Partly covered (14)",
+            titleAttr: "50%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "^(?!(0%|100%)).*";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "Uncovered (19)",
+            titleAttr: "0%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "^0%";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "Fully covered (22)",
+            titleAttr: "100%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "100%";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "All (55)",
+            titleAttr: "all",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = ".";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+    ],
+ 
+        columnDefs: [
+            {className: "align-right", targets: [2,3]
+            },
+            {
+                render: function ( data, type, row, meta ) {
+                            return data+"%" ;        
+                        },
+                targets: 2
+            }
+        ]             
+    } );
+    oTable.button(0).trigger();
+
+} );    
+</script>
+<div id="footer">
+<hr>
+<p>Created by "CodeCoverage" version 0.10.6+52 from 2024-03-13</p>
+</div>
+
+</body>
+</html>

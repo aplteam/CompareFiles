@@ -17,6 +17,7 @@
      i←p.StartInfo
      i.FileName←{'"'=1⍴⍵:⍵↑⍨1++/2>+\'"'=⍵ ⋄ ⍵↑⍨¯1+⍵⍳' '}cmd
      i.Arguments←(1+≢i.FileName)↓cmd
+     i.FileName←i.FileName~'"'
      i.RedirectStandardOutput←1
      i.RedirectStandardInput←1
      i.RedirectStandardError←1
