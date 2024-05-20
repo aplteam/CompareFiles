@@ -24,7 +24,7 @@
  :AndIf 0=⎕SE.CompareFiles.⎕NC'DEVELOPMENT'
      :If 0<⎕NC'parms'
      :AndIf ~parms.batch
-     :AndIf 1 C.YesOrNo'Set DEVELOPMENT←1 in ⎕SE.CompareFiles? (Allows executing user command code in # rather than ⎕SE)'
+     :AndIf 1 CommTools.YesOrNo'Set DEVELOPMENT←1 in ⎕SE.CompareFiles? (Allows executing user command code in # rather than ⎕SE)'
          ⎕SE.CompareFiles.DEVELOPMENT←1
      :EndIf
  :EndIf
