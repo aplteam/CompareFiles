@@ -41,7 +41,7 @@ With version 5 the name of the ini file was changed from `ini.json5` to `compare
 
 ### Installation
 
-For version 18.0, 18.2 and 19.0 install `CompareFiles` into `[MyUCMDs]`:
+For version 18.2 or later install `CompareFiles` into `[MyUCMDs]`:
 
 ```
 ]InstallPackage [tatin]CompareFiles [MyUCMDs]
@@ -58,7 +58,7 @@ Otherwise we recommend [BeyondCompare](https://www.scootersoftware.com/ "Link to
 
 ## Three-file comparisons
 
-Some utilities offer a three-file comparison. This is not supported by `CompareFiles`. The reason is that this comes with distinct features/parameters that make it very hard to unify them under a single umbrella, not only in terms of implementation but also in using this feature.
+Some utilities offer a three-file comparison. This is not supported by `CompareFiles`. The reason is that this comes with distinct features/parameters that make it very hard to unify them under a single umbrella, not only in terms of implementation but also in terms of using this feature.
 
 
 ## Examples
@@ -81,7 +81,7 @@ You can specify a default comparison utility
 
 ## Prerequisites
 
-* `CompareFiles` requires Dyalog Unicode 18.0 or better
+* `CompareFiles` requires Dyalog Unicode 18.2 or better
 * Link version 3.0.8 or better
 * The [Tatin package manager](https://github.com/aplteam/tatin) must be available
 * The comparison utility you want to use must be added to the configuration file in one of two possible ways:
