@@ -11,7 +11,7 @@ It it available in two ways:
 * As a user command 
 * As an API that can be used by other utilties and user commands
 
-  For example, the user command `]APL2Git` uses the API when the command `]APLGit2.CompareCommits` is issued.
+  For example, the user command `]APLGits` uses the API when the command `]APLGit2.CompareCommits` is issued.
 
 It comes with ready-to-use functions for a couple of popular comparison utilities:
 
